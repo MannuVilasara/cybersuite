@@ -123,54 +123,89 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* For Developers Section */}
-        <section className="py-20 px-4">
+        {/* Comprehensive Features Section */}
+        <section className="py-20 px-4 bg-black/20">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
               <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-                For <span className="text-green-400">Developers</span>
+                Unified <span className="text-cyan-400">Security Platform</span>
               </h2>
               <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-                Authorize your GitHub repos and get instant protection during critical vulnerability windows. 
-                Stay secure while service providers work on official patches.
+                Everything you need for enterprise-grade security in one comprehensive platform.
+                Stop juggling multiple tools and consolidate your security stack.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-green-400/50 transition-all duration-300">
-                <div className="w-12 h-12 bg-green-500/20 rounded-2xl flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-red-400/50 transition-all duration-300">
+                <div className="w-12 h-12 bg-red-500/20 rounded-2xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-3">Zero-Day Protection</h3>
+                <h3 className="text-lg font-bold text-white mb-3">Git Repository Scanner</h3>
                 <p className="text-gray-400 text-sm">
-                  Get security fixes immediately when vulnerabilities are discovered, not weeks later when patches are public.
+                  Automated code analysis detecting hardcoded secrets, API keys, vulnerabilities, and unsafe configurations with AI-powered auto-fixes.
                 </p>
               </div>
 
               <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-blue-400/50 transition-all duration-300">
                 <div className="w-12 h-12 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l3 3-3 3m13 0h-6m-2-5L7 3m0 0L2 3m5 0v6m8 4v6m-2-2l2 2 2-2" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-3">GitHub Integration</h3>
+                <h3 className="text-lg font-bold text-white mb-3">Zero-Trust Secrets Vault</h3>
                 <p className="text-gray-400 text-sm">
-                  Simple GitHub OAuth authorization. We automatically create Pull Requests with security fixes for your repositories.
+                  Client-side encrypted vault for API keys, passwords, tokens, and certificates. Only you can decrypt your data.
                 </p>
               </div>
 
               <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-purple-400/50 transition-all duration-300">
                 <div className="w-12 h-12 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-4">
                   <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-3">Transparent Process</h3>
+                <h3 className="text-lg font-bold text-white mb-3">AI Security Assistant</h3>
                 <p className="text-gray-400 text-sm">
-                  Review all Pull Requests before merging. Full visibility into what fixes are being applied and why.
+                  Intelligent AI explains vulnerabilities in plain language, suggests secure practices, and generates automated fixes.
+                </p>
+              </div>
+
+              <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-yellow-400/50 transition-all duration-300">
+                <div className="w-12 h-12 bg-yellow-500/20 rounded-2xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-3">Log Monitoring & Alerts</h3>
+                <p className="text-gray-400 text-sm">
+                  Real-time log analysis detecting application errors, attack attempts, suspicious behavior, and misconfigurations.
+                </p>
+              </div>
+
+              <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-green-400/50 transition-all duration-300">
+                <div className="w-12 h-12 bg-green-500/20 rounded-2xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-3">Zero-Day Protection</h3>
+                <p className="text-gray-400 text-sm">
+                  Get security fixes immediately when vulnerabilities are discovered, before public patches are released.
+                </p>
+              </div>
+
+              <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-6 border border-white/10 hover:border-orange-400/50 transition-all duration-300">
+                <div className="w-12 h-12 bg-orange-500/20 rounded-2xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-3">Developer Dashboard</h3>
+                <p className="text-gray-400 text-sm">
+                  Modern UI with vulnerability reports, secrets management, log viewer, and auto-fix suggestions in one place.
                 </p>
               </div>
             </div>
