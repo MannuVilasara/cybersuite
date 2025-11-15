@@ -544,7 +544,7 @@ export const githubOAuthCallback = asyncHandler(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify({
         client_id: clientId,
@@ -553,7 +553,7 @@ export const githubOAuthCallback = asyncHandler(
       }),
     });
 
-    const tokenData = await tokenResponse.json() as { access_token?: string; error?: string };
+    const tokenData = (await tokenResponse.json()) as { access_token?: string; error?: string };
 
     if (!tokenData.access_token) {
       logger.error('Failed to get access token', { tokenData });
@@ -568,12 +568,12 @@ export const githubOAuthCallback = asyncHandler(
     // Get user information
     const userResponse = await fetch('https://api.github.com/user', {
       headers: {
-        'Authorization': `Bearer ${tokenData.access_token}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${tokenData.access_token}`,
+        Accept: 'application/json',
       },
     });
 
-    const userData = await userResponse.json() as { login?: string; id?: number; email?: string };
+    const userData = (await userResponse.json()) as { login?: string; id?: number; email?: string };
 
     if (!userData.login) {
       logger.error('Failed to get user data', { userData });
@@ -617,12 +617,12 @@ export const githubOAuthCallback = asyncHandler(
         if (installation) {
           logger.info('Found matching installation', {
             installationId: installation.id,
-            account: installation.account?.login
+            account: installation.account?.login,
           });
         } else {
           logger.warn('No matching installation found for user', {
             username: userData.login,
-            availableAccounts: installations.map((i: any) => i.account?.login)
+            availableAccounts: installations.map((i: any) => i.account?.login),
           });
         }
       } catch (err) {
@@ -631,7 +631,7 @@ export const githubOAuthCallback = asyncHandler(
       }
     } else {
       logger.warn('GitHub App credentials not configured');
-    }    // Redirect back to frontend with user info
+    } // Redirect back to frontend with user info
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     const redirectUrl = new URL('/user-dashboard', frontendUrl);
     redirectUrl.searchParams.set('github_auth', 'success');

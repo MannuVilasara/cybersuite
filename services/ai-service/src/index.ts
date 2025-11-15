@@ -9,9 +9,7 @@ import { requestLogger } from './middleware/request-logger.js';
 import aiRoutes from './routes/ai.routes.js';
 import dotenv from 'dotenv';
 
-
 dotenv.config();
-
 
 const app = express();
 const PORT = config.aiService.port;
