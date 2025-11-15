@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 # Production docker-compose file using pre-built images from GitHub Container Registry
 # For local development, use: docker-compose -f docker-compose.dev.yml up
@@ -17,11 +17,11 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cybersec123}
       POSTGRES_DB: ${POSTGRES_DB:-cybersec_auth}
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cybersec}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-cybersec}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,11 +34,11 @@ services:
     container_name: cybersec-redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -57,12 +57,12 @@ services:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - '9000:9000'
+      - '9001:9001'
     volumes:
       - minio_data:/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
       interval: 30s
       timeout: 20s
       retries: 3
@@ -85,15 +85,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:3001/health",
-        ]
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:3001/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -112,15 +104,7 @@ services:
       NODE_ENV: production
       PORT: 3002
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:3002/health",
-        ]
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:3002/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -139,15 +123,7 @@ services:
       NODE_ENV: production
       PORT: 3003
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:3003/health",
-        ]
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:3003/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -169,15 +145,7 @@ services:
       - ai-service
       - securebot
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:3000/",
-        ]
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:3000/']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -191,8 +159,8 @@ services:
     container_name: cybersec-nginx
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./infrastructure/docker/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./infrastructure/docker/certbot/conf:/etc/letsencrypt:ro
@@ -203,15 +171,7 @@ services:
       - ai-service
       - securebot
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost/health",
-        ]
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost/health']
       interval: 30s
       timeout: 10s
       retries: 3
