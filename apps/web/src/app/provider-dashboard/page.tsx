@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -24,7 +24,7 @@ const ProviderDashboard = () => {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -47,9 +47,9 @@ const ProviderDashboard = () => {
         bugData: bugData.trim() || null,
         fixData: fixData.trim() || null,
         timestamp: new Date().toISOString(),
-        status: 'pending'
+        status: 'pending',
       };
-      
+
       setSubmittedReports([newReport, ...submittedReports]);
       setBugData('');
       setFixData('');
@@ -62,9 +62,9 @@ const ProviderDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 pt-16 relative">
       <div className="fixed inset-0 z-0">
-        <img 
-          src="/background-auth.webp" 
-          alt="Background" 
+        <img
+          src="/background-auth.webp"
+          alt="Background"
           className="w-full h-full object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-black/70"></div>
@@ -87,8 +87,18 @@ const ProviderDashboard = () => {
               <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-purple-500/20 rounded-2xl flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    <svg
+                      className="w-6 h-6 text-purple-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                      />
                     </svg>
                   </div>
                   <h3 className="text-lg font-semibold text-white">Provider Profile</h3>
@@ -120,8 +130,18 @@ const ProviderDashboard = () => {
               <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-red-500/20 rounded-2xl flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    <svg
+                      className="w-6 h-6 text-red-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
                     </svg>
                   </div>
                   <h3 className="text-lg font-semibold text-white">Security Reports</h3>
@@ -134,13 +154,13 @@ const ProviderDashboard = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400 text-sm">Reports with Bug Data</span>
                     <span className="text-red-400 font-medium">
-                      {submittedReports.filter(r => r.bugData).length}
+                      {submittedReports.filter((r) => r.bugData).length}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400 text-sm">Reports with Fix Data</span>
                     <span className="text-green-400 font-medium">
-                      {submittedReports.filter(r => r.fixData).length}
+                      {submittedReports.filter((r) => r.fixData).length}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -153,8 +173,18 @@ const ProviderDashboard = () => {
               <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-green-500/20 rounded-2xl flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="w-6 h-6 text-green-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                   </div>
                   <h3 className="text-lg font-semibold text-white">Impact Metrics</h3>
@@ -179,17 +209,29 @@ const ProviderDashboard = () => {
 
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-white mb-6">Security Reporting Center</h2>
-            
+
             <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10 max-w-5xl mx-auto">
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 bg-blue-500/20 rounded-2xl flex items-center justify-center mr-4">
-                  <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <svg
+                    className="w-6 h-6 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   </svg>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white">Submit Bug & Fix Report</h3>
-                  <p className="text-gray-400 text-sm">Provide both vulnerability and fix information in a single submission</p>
+                  <p className="text-gray-400 text-sm">
+                    Provide both vulnerability and fix information in a single submission
+                  </p>
                 </div>
               </div>
 
@@ -197,8 +239,18 @@ const ProviderDashboard = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
-                      <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                      <svg
+                        className="w-4 h-4 text-red-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                        />
                       </svg>
                       Bug/Vulnerability Data (JSON Format)
                     </label>
@@ -214,8 +266,18 @@ const ProviderDashboard = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
-                      <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <svg
+                        className="w-4 h-4 text-green-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
                       </svg>
                       Fix/Patch Data (JSON Format)
                     </label>
@@ -235,11 +297,18 @@ const ProviderDashboard = () => {
                   className="bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-white font-medium py-4 px-8 rounded-lg transition-all duration-200 flex items-center justify-center gap-3 mx-auto min-w-64"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    />
                   </svg>
                   Submit Bug & Fix Report
                 </button>
-                <p className="text-gray-500 text-sm mt-3">Both bug and fix data will be saved as a single record</p>
+                <p className="text-gray-500 text-sm mt-3">
+                  Both bug and fix data will be saved as a single record
+                </p>
               </div>
             </div>
           </div>
@@ -252,7 +321,9 @@ const ProviderDashboard = () => {
                   <table className="w-full">
                     <thead className="bg-black/20">
                       <tr className="border-b border-gray-700">
-                        <th className="text-left py-4 px-6 text-gray-300 font-medium">Submitted At</th>
+                        <th className="text-left py-4 px-6 text-gray-300 font-medium">
+                          Submitted At
+                        </th>
                         <th className="text-left py-4 px-6 text-gray-300 font-medium">Status</th>
                         <th className="text-left py-4 px-6 text-gray-300 font-medium">Bug Data</th>
                         <th className="text-left py-4 px-6 text-gray-300 font-medium">Fix Data</th>
@@ -260,7 +331,10 @@ const ProviderDashboard = () => {
                     </thead>
                     <tbody>
                       {submittedReports.slice(0, 10).map((report) => (
-                        <tr key={report.id} className="border-b border-gray-800 hover:bg-white/5 transition-colors">
+                        <tr
+                          key={report.id}
+                          className="border-b border-gray-800 hover:bg-white/5 transition-colors"
+                        >
                           <td className="py-4 px-6 text-gray-300">
                             {formatDate(report.timestamp)}
                           </td>
@@ -272,7 +346,9 @@ const ProviderDashboard = () => {
                           <td className="py-4 px-6 text-gray-300 font-mono text-sm max-w-xs">
                             {report.bugData ? (
                               <div className="truncate text-red-300">
-                                {report.bugData.length > 50 ? `${report.bugData.substring(0, 50)}...` : report.bugData}
+                                {report.bugData.length > 50
+                                  ? `${report.bugData.substring(0, 50)}...`
+                                  : report.bugData}
                               </div>
                             ) : (
                               <span className="text-gray-500 italic">No bug data</span>
@@ -281,7 +357,9 @@ const ProviderDashboard = () => {
                           <td className="py-4 px-6 text-gray-300 font-mono text-sm max-w-xs">
                             {report.fixData ? (
                               <div className="truncate text-green-300">
-                                {report.fixData.length > 50 ? `${report.fixData.substring(0, 50)}...` : report.fixData}
+                                {report.fixData.length > 50
+                                  ? `${report.fixData.substring(0, 50)}...`
+                                  : report.fixData}
                               </div>
                             ) : (
                               <span className="text-gray-500 italic">No fix data</span>
@@ -294,11 +372,23 @@ const ProviderDashboard = () => {
                 </div>
               ) : (
                 <div className="py-12 px-6 text-center">
-                  <svg className="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <svg
+                    className="w-16 h-16 text-gray-600 mx-auto mb-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   </svg>
                   <p className="text-gray-400 mb-2">No reports submitted yet</p>
-                  <p className="text-gray-500 text-sm">Submit your first vulnerability or fix report above</p>
+                  <p className="text-gray-500 text-sm">
+                    Submit your first vulnerability or fix report above
+                  </p>
                 </div>
               )}
             </div>
@@ -307,8 +397,18 @@ const ProviderDashboard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
               <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-6 h-6 text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 Vulnerability Reporting Guidelines
               </h3>
@@ -334,8 +434,18 @@ const ProviderDashboard = () => {
 
             <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
               <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-6 h-6 text-green-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 Fix Submission Guidelines
               </h3>

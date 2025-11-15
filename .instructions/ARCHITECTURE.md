@@ -103,7 +103,7 @@ export function newHelperFunction() {
 }
 
 // src/modules/Feature/index.js
-import { newHelperFunction } from "../../utils/newFeatureHelper";
+import { newHelperFunction } from '../../utils/newFeatureHelper';
 
 // ❌ BAD: Modify existing utility file
 // Don't add to src/utils/helpers.js if it's already large

@@ -17,23 +17,26 @@ import apiKeyRoutes from './routes/api-key.routes.js';
 
 const config = getConfig();
 const logger = createLogger({
-    service: 'auth-service',
-    level: (config.logging.level as LogLevel) || LogLevel.INFO,
-    pretty: config.app.env === 'development',
-}); const app = express();
+  service: 'auth-service',
+  level: (config.logging.level as LogLevel) || LogLevel.INFO,
+  pretty: config.app.env === 'development',
+});
+const app = express();
 
 // Security middleware
 app.use(helmet());
-app.use(cors({
+app.use(
+  cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:3010',
     credentials: true,
-}));
+  })
+);
 
 // Rate limiting
 const limiter = rateLimit({
-    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10), // 15 minutes
-    max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
-    message: 'Too many requests from this IP, please try again later.',
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10), // 15 minutes
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
+  message: 'Too many requests from this IP, please try again later.',
 });
 app.use('/api', limiter);
 
@@ -46,11 +49,11 @@ app.use(requestLogger(logger));
 
 // Health check
 app.get('/health', (_req, res) => {
-    res.json({
-        status: 'healthy',
-        service: 'auth-service',
-        timestamp: new Date().toISOString(),
-    });
+  res.json({
+    status: 'healthy',
+    service: 'auth-service',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Routes
@@ -64,8 +67,9 @@ app.use(errorHandler(logger));
 // Start server
 const port = parseInt(process.env.PORT || '3001', 10);
 app.listen(port, () => {
-    logger.info(`Auth service listening on port ${port}`, {
-        environment: config.app.env,
-        port,
-    });
-}); export default app;
+  logger.info(`Auth service listening on port ${port}`, {
+    environment: config.app.env,
+    port,
+  });
+});
+export default app;

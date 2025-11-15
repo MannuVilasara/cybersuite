@@ -138,19 +138,16 @@ Modern, clean UI providing:
 ## 🔐 Security Principles
 
 1. **Zero-Trust Architecture**
-
    - Never trust, always verify
    - Client-side encryption for sensitive data
    - Least privilege access control
 
 2. **Defense in Depth**
-
    - Multiple security layers
    - Service-level encryption
    - Comprehensive audit logging
 
 3. **Privacy by Design**
-
    - No plaintext secrets on server
    - End-to-end encryption
    - User data isolation

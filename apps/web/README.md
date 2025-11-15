@@ -28,16 +28,19 @@ This is the main frontend application for the Unified Cybersecurity Platform bui
 ## Getting Started
 
 1. Install dependencies:
+
 ```bash
 pnpm install
 ```
 
 2. Set up environment variables:
+
 ```bash
 cp .env.local.example .env.local
 ```
 
 3. Run the development server:
+
 ```bash
 pnpm dev
 ```

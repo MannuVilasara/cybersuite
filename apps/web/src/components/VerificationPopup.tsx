@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-hot-toast';
@@ -23,7 +23,7 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
   server,
   isOpen,
   onClose,
-  onVerificationComplete
+  onVerificationComplete,
 }) => {
   const [otp, setOtp] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -119,14 +119,11 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
     if (!server) return;
 
     try {
-      const response = await axios.get(
-        `${env.API_URL}/my/servers`,
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${env.API_URL}/my/servers`, {
+        withCredentials: true,
+      });
 
-      const updatedServer = response.data.servers?.find(
-        (s: Server) => s._id === server._id
-      );
+      const updatedServer = response.data.servers?.find((s: Server) => s._id === server._id);
 
       if (updatedServer?.isVerified) {
         stopPolling();
@@ -167,39 +164,49 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
       <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        
         <div className="flex items-center justify-between p-6 border-b border-gray-700">
           <div>
             <h2 className="text-2xl font-bold text-white">Verify Server</h2>
             <p className="text-gray-400 text-sm mt-1">{server.name}</p>
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
-          >
+          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
 
-        
         <div className="p-6 space-y-6">
-          
           <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
             <div className="flex items-start gap-3">
-              <svg className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               <div>
                 <h3 className="text-yellow-400 font-medium mb-1">Time Remaining</h3>
                 <p className="text-white text-2xl font-bold">{formatTime(timeLeft)}</p>
-                <p className="text-gray-400 text-sm mt-1">Complete verification before time runs out</p>
+                <p className="text-gray-400 text-sm mt-1">
+                  Complete verification before time runs out
+                </p>
               </div>
             </div>
           </div>
 
-          
           <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
             <div className="flex items-start justify-between mb-3">
               <div>
@@ -211,23 +218,39 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
                 className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
                 </svg>
                 Copy
               </button>
             </div>
             <div className="bg-black/50 border border-gray-600 rounded-lg p-4">
-              <code className="text-white font-mono text-lg tracking-wider">{otp || 'Generating...'}</code>
+              <code className="text-white font-mono text-lg tracking-wider">
+                {otp || 'Generating...'}
+              </code>
             </div>
           </div>
 
-          
           <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4">
             <div className="flex items-start justify-between mb-3">
               <div>
                 <h3 className="text-white font-medium mb-1 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l3 3-3 3m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-5 h-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 9l3 3-3 3m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   Verification Command
                 </h3>
@@ -238,7 +261,12 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
                 className="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
                 </svg>
                 Copy
               </button>
@@ -250,11 +278,20 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
             </div>
           </div>
 
-          
           <div className="bg-white/5 border border-white/10 rounded-xl p-4">
             <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-              <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              <svg
+                className="w-5 h-5 text-purple-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
               </svg>
               Verification Steps
             </h3>
@@ -265,7 +302,9 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
                 </span>
                 <div>
                   <strong className="text-white">SSH into your server</strong>
-                  <p className="text-gray-400 mt-1">Connect to your server using SSH or your preferred method</p>
+                  <p className="text-gray-400 mt-1">
+                    Connect to your server using SSH or your preferred method
+                  </p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -274,7 +313,9 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
                 </span>
                 <div>
                   <strong className="text-white">Run the verification command</strong>
-                  <p className="text-gray-400 mt-1">Copy and paste the command shown above to create the verification file</p>
+                  <p className="text-gray-400 mt-1">
+                    Copy and paste the command shown above to create the verification file
+                  </p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -283,13 +324,14 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
                 </span>
                 <div>
                   <strong className="text-white">Wait for automatic verification</strong>
-                  <p className="text-gray-400 mt-1">Our system will automatically detect and verify your server within a few seconds</p>
+                  <p className="text-gray-400 mt-1">
+                    Our system will automatically detect and verify your server within a few seconds
+                  </p>
                 </div>
               </li>
             </ol>
           </div>
 
-          
           {isPolling && (
             <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
               <div className="flex items-center gap-3">
@@ -303,7 +345,6 @@ const VerificationPopup: React.FC<VerificationPopupProps> = ({
           )}
         </div>
 
-        
         <div className="flex items-center justify-between p-6 border-t border-gray-700 bg-black/20">
           <p className="text-gray-400 text-sm">
             OTP expires in <strong className="text-white">{formatTime(timeLeft)}</strong>

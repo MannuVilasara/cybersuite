@@ -13,17 +13,19 @@ const PORT = config.aiService.port;
 
 // Security middleware
 app.use(helmet());
-app.use(cors({
+app.use(
+  cors({
     origin: config.corsOrigin,
     credentials: true,
-}));
+  })
+);
 
 // Rate limiting
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
-    standardHeaders: true,
-    legacyHeaders: false,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
 app.use(limiter);
@@ -37,11 +39,11 @@ app.use(requestLogger);
 
 // Health check
 app.get('/health', (req, res) => {
-    res.json({
-        status: 'healthy',
-        service: 'ai-service',
-        timestamp: new Date().toISOString(),
-    });
+  res.json({
+    status: 'healthy',
+    service: 'ai-service',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Routes
@@ -51,5 +53,5 @@ app.use('/api/ai', aiRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    logger.info(`AI Service running on port ${PORT}`);
+  logger.info(`AI Service running on port ${PORT}`);
 });

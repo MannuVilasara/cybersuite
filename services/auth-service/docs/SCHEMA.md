@@ -293,7 +293,7 @@ When making schema changes:
 
 ```typescript
 const user = await prisma.user.findUnique({
-  where: { email: "user@example.com" },
+  where: { email: 'user@example.com' },
   include: {
     sessions: true,
     apiKeys: true,
@@ -311,7 +311,7 @@ const session = await prisma.session.create({
     refreshToken: refreshToken,
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     ipAddress: req.ip,
-    userAgent: req.headers["user-agent"],
+    userAgent: req.headers['user-agent'],
   },
 });
 ```
@@ -321,7 +321,7 @@ const session = await prisma.session.create({
 ```typescript
 const apiKeys = await prisma.apiKey.findMany({
   where: { userId: user.id },
-  orderBy: { createdAt: "desc" },
+  orderBy: { createdAt: 'desc' },
   select: {
     id: true,
     name: true,
@@ -338,9 +338,9 @@ const apiKeys = await prisma.apiKey.findMany({
 const logs = await prisma.auditLog.findMany({
   where: {
     userId: user.id,
-    action: "PASSWORD_CHANGED",
+    action: 'PASSWORD_CHANGED',
   },
-  orderBy: { timestamp: "desc" },
+  orderBy: { timestamp: 'desc' },
   take: 10,
 });
 ```
@@ -417,7 +417,7 @@ Use pagination:
 const users = await prisma.user.findMany({
   skip: (page - 1) * limit,
   take: limit,
-  orderBy: { createdAt: "desc" },
+  orderBy: { createdAt: 'desc' },
 });
 ```
 

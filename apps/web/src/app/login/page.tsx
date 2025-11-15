@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { useAuthStore } from "@/stores/auth.store";
-import { authService } from "@/services/auth.service";
+import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useAuthStore } from '@/stores/auth.store';
+import { authService } from '@/services/auth.service';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
@@ -21,12 +21,12 @@ const LoginPage = () => {
     e.preventDefault();
 
     if (!email.trim() || !password.trim()) {
-      toast.error("All fields are required");
+      toast.error('All fields are required');
       return;
     }
 
     if (!acceptedTerms) {
-      toast.error("Please accept the terms and conditions");
+      toast.error('Please accept the terms and conditions');
       return;
     }
 
@@ -34,7 +34,7 @@ const LoginPage = () => {
 
     try {
       const response = await authService.login({ email, password });
-      console.log("Login response:", response);
+      console.log('Login response:', response);
 
       const transformedUser = {
         ...response.user,
@@ -46,19 +46,18 @@ const LoginPage = () => {
             ip?: string;
           }) => ({
             ...entry,
-            loggedInAt:
-              entry.timestamp || entry.loggedInAt || new Date().toISOString(),
-            ip: entry.ipAddress || entry.ip || "unknown",
+            loggedInAt: entry.timestamp || entry.loggedInAt || new Date().toISOString(),
+            ip: entry.ipAddress || entry.ip || 'unknown',
           })
         ),
       };
 
       setAuth(transformedUser, response.token);
-      setEmail("");
-      setPassword("");
+      setEmail('');
+      setPassword('');
 
-      router.push("/");
-      toast.success(response.message || "Logged in successfully");
+      router.push('/');
+      toast.success(response.message || 'Logged in successfully');
     } catch (err: unknown) {
       const errorMessage =
         (
@@ -68,10 +67,10 @@ const LoginPage = () => {
           }
         ).response?.data?.error?.message ||
         (err as { message?: string }).message ||
-        "Error logging in";
+        'Error logging in';
       toast.error(errorMessage);
       console.error(
-        "Login error:",
+        'Login error:',
         (err as { response?: { data?: unknown } }).response?.data || err
       );
     } finally {
@@ -119,7 +118,7 @@ const LoginPage = () => {
               <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
                 Welcome
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                  {" "}
+                  {' '}
                   Back
                 </span>
               </h1>
@@ -138,9 +137,7 @@ const LoginPage = () => {
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span className="text-gray-300">
-                    Advanced threat detection
-                  </span>
+                  <span className="text-gray-300">Advanced threat detection</span>
                 </div>
               </div>
             </div>
@@ -149,9 +146,7 @@ const LoginPage = () => {
           <div className="flex justify-center lg:justify-end">
             <div className="w-full max-w-md">
               <div className="backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 bg-zinc-900/95">
-                <h2 className="text-2xl text-white font-bold mb-1 text-center">
-                  Log In
-                </h2>
+                <h2 className="text-2xl text-white font-bold mb-1 text-center">Log In</h2>
 
                 <p className="text-gray-400 text-sm text-center mb-8">
                   Enter your credentials to access your account
@@ -188,7 +183,7 @@ const LoginPage = () => {
                       htmlFor="acceptTermsLogin"
                       className="text-gray-300 text-sm cursor-pointer"
                     >
-                      I agree to the{" "}
+                      I agree to the{' '}
                       <Link
                         href="/terms-and-conditions"
                         className="text-white hover:text-gray-300 underline"
@@ -240,7 +235,7 @@ const LoginPage = () => {
 
                 <div className="text-center mt-6 pt-6 border-t border-gray-700/30">
                   <p className="text-gray-400 text-sm">
-                    Don&apos;t have an account?{" "}
+                    Don&apos;t have an account?{' '}
                     <Link
                       href="/signup"
                       className="text-white hover:text-gray-300 font-medium transition-colors duration-300"

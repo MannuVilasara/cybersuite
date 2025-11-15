@@ -93,12 +93,12 @@ class Manager {}
 
 ```javascript
 // 1. Imports (grouped logically)
-import externalDeps from "library";
-import { helper } from "./utils/helper";
+import externalDeps from 'library';
+import { helper } from './utils/helper';
 
 // 2. Constants
 const MAX_ATTEMPTS = 3;
-const API_ENDPOINT = "/api/v1";
+const API_ENDPOINT = '/api/v1';
 
 // 3. Type definitions (if applicable)
 // interface, types, etc.
@@ -220,12 +220,12 @@ try {
 ```javascript
 // ✅ GOOD
 const DEFAULT_TIMEOUT_MS = 5000;
-const API_BASE_URL = "https://api.example.com";
+const API_BASE_URL = 'https://api.example.com';
 const MAX_RETRY_ATTEMPTS = 3;
 
 // ❌ BAD
 setTimeout(() => {}, 5000);
-fetch("https://api.example.com/users");
+fetch('https://api.example.com/users');
 ```
 
 ### DRY Principle
@@ -260,9 +260,9 @@ fetch("https://api.example.com/users");
 
 ```javascript
 // ✅ GOOD
-describe("UserAuthentication", () => {
-  it("should return true for valid credentials", () => {});
-  it("should throw error for invalid email format", () => {});
+describe('UserAuthentication', () => {
+  it('should return true for valid credentials', () => {});
+  it('should throw error for invalid email format', () => {});
 });
 ```
 
@@ -283,7 +283,7 @@ export function helperB() {}
 export default MainClass;
 
 // In consumer
-import MainClass, { helperA, helperB } from "./module";
+import MainClass, { helperA, helperB } from './module';
 ```
 
 ### Imports

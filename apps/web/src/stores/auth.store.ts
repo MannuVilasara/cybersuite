@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   token: null,
   isAuthenticated: false,
   activeTab: 'profile',
-  
+
   setAuth: (user, token) => {
     set({ user, token, isAuthenticated: true });
     if (typeof window !== 'undefined') {
@@ -50,7 +50,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem('user', JSON.stringify(user));
     }
   },
-  
+
   clearAuth: () => {
     set({ user: null, token: null, isAuthenticated: false });
     if (typeof window !== 'undefined') {
@@ -59,14 +59,14 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.removeItem('user');
     }
   },
-  
+
   setActiveTab: (tab) => set({ activeTab: tab }),
-  
+
   initAuth: () => {
     if (typeof window !== 'undefined') {
       const storedUser = localStorage.getItem('user');
       const storedToken = localStorage.getItem('token');
-      
+
       if (storedUser && storedToken) {
         try {
           const user = JSON.parse(storedUser);

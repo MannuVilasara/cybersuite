@@ -53,9 +53,8 @@ export async function explainVulnerabilityWithAI(
       ],
     });
 
-    const aiResponse = message.content[0] && message.content[0].type === 'text'
-      ? message.content[0].text
-      : '';
+    const aiResponse =
+      message.content[0] && message.content[0].type === 'text' ? message.content[0].text : '';
 
     const sections = parseExplanationResponse(aiResponse);
 
@@ -70,11 +69,11 @@ export async function explainVulnerabilityWithAI(
   } catch (error) {
     logger.error('Failed to explain vulnerability', {
       vulnerabilityId,
-      errorMessage: error instanceof Error ? error.message : String(error)
+      errorMessage: error instanceof Error ? error.message : String(error),
     });
     throw new ServiceUnavailableError('AI service temporarily unavailable');
   }
-}/**
+} /**
  * Generate a code fix for a vulnerability
  */
 export async function generateCodeFix(
@@ -91,7 +90,8 @@ export async function generateCodeFix(
       model: process.env.ANTHROPIC_MODEL || 'claude-3-haiku-20240307',
       max_tokens: Number(process.env.ANTHROPIC_MAX_TOKENS) || 4096,
       temperature: 0.3,
-      system: 'You are an expert developer who fixes security vulnerabilities. Provide clean, production-ready code fixes.',
+      system:
+        'You are an expert developer who fixes security vulnerabilities. Provide clean, production-ready code fixes.',
       messages: [
         {
           role: 'user',
@@ -100,9 +100,8 @@ export async function generateCodeFix(
       ],
     });
 
-    const aiResponse = message.content[0] && message.content[0].type === 'text'
-      ? message.content[0].text
-      : '';
+    const aiResponse =
+      message.content[0] && message.content[0].type === 'text' ? message.content[0].text : '';
 
     const parsedFix = parseFixResponse(aiResponse);
 
@@ -119,7 +118,7 @@ export async function generateCodeFix(
   } catch (error) {
     logger.error('Failed to generate fix', {
       vulnerabilityId,
-      errorMessage: error instanceof Error ? error.message : String(error)
+      errorMessage: error instanceof Error ? error.message : String(error),
     });
     throw new ServiceUnavailableError('AI service temporarily unavailable');
   }
@@ -135,9 +134,7 @@ export async function createPullRequest(
   repoInfo?: { owner: string; repo: string }
 ): Promise<AutoPR> {
   try {
-    const fixes = await Promise.all(
-      vulnerabilityIds.map(id => generateCodeFix(id, true))
-    );
+    const fixes = await Promise.all(vulnerabilityIds.map((id) => generateCodeFix(id, true)));
 
     const repoOwner = repoInfo?.owner || process.env.GITHUB_REPO_OWNER || 'demo-org';
     const repoName = repoInfo?.repo || process.env.GITHUB_REPO_NAME || 'demo-repo';
@@ -184,13 +181,13 @@ export async function createPullRequest(
     logger.info('Pull request created', {
       prUrl: pr.html_url,
       prNumber: pr.number,
-      vulnerabilityCount: vulnerabilityIds.length
+      vulnerabilityCount: vulnerabilityIds.length,
     });
 
     return {
       id: `pr-${pr.number}`,
       prId: `pr-${pr.number}`,
-      fixSuggestionId: fixes.map(f => f.vulnerabilityId).join(','),
+      fixSuggestionId: fixes.map((f) => f.vulnerabilityId).join(','),
       repositoryId: `${repoOwner}/${repoName}`,
       prNumber: pr.number,
       title,
@@ -201,8 +198,14 @@ export async function createPullRequest(
       baseBranch,
       vulnerabilitiesFixed: vulnerabilityIds,
       filesChanged: fixes.length,
-      linesAdded: fixes.reduce((sum: number, fix: AIFixSuggestion) => sum + countLines(fix.fixedCode), 0),
-      linesRemoved: fixes.reduce((sum: number, fix: AIFixSuggestion) => sum + countLines(fix.fixedCode), 0),
+      linesAdded: fixes.reduce(
+        (sum: number, fix: AIFixSuggestion) => sum + countLines(fix.fixedCode),
+        0
+      ),
+      linesRemoved: fixes.reduce(
+        (sum: number, fix: AIFixSuggestion) => sum + countLines(fix.fixedCode),
+        0
+      ),
       status: 'open' as const,
       createdAt: new Date(pr.created_at),
       mergedAt: pr.merged_at ? new Date(pr.merged_at) : null,
@@ -210,7 +213,7 @@ export async function createPullRequest(
   } catch (error) {
     logger.error('Failed to create PR', {
       vulnerabilityIds,
-      errorMessage: error instanceof Error ? error.message : String(error)
+      errorMessage: error instanceof Error ? error.message : String(error),
     });
     throw new ServiceUnavailableError('Failed to create pull request');
   }
@@ -219,10 +222,7 @@ export async function createPullRequest(
 /**
  * Handle GitHub App installation webhook
  */
-export async function handleGitHubInstallation(
-  event: string,
-  payload: any
-): Promise<void> {
+export async function handleGitHubInstallation(event: string, payload: any): Promise<void> {
   logger.info('Processing GitHub webhook', { event, action: payload.action });
 
   switch (event) {
@@ -231,13 +231,13 @@ export async function handleGitHubInstallation(
         logger.info('GitHub App installed', {
           installationId: payload.installation.id,
           account: payload.installation.account.login,
-          repositories: payload.repositories?.length || 0
+          repositories: payload.repositories?.length || 0,
         });
         // Store installation info in database
         // Trigger initial scan of repositories
       } else if (payload.action === 'deleted') {
         logger.info('GitHub App uninstalled', {
-          installationId: payload.installation.id
+          installationId: payload.installation.id,
         });
         // Clean up installation data
       }
@@ -246,7 +246,7 @@ export async function handleGitHubInstallation(
     case 'installation_repositories':
       if (payload.action === 'added') {
         logger.info('Repositories added', {
-          repositories: payload.repositories_added.map((r: any) => r.full_name)
+          repositories: payload.repositories_added.map((r: any) => r.full_name),
         });
         // Scan newly added repositories
       }
@@ -255,7 +255,7 @@ export async function handleGitHubInstallation(
     case 'push':
       logger.info('Push event received', {
         repository: payload.repository.full_name,
-        ref: payload.ref
+        ref: payload.ref,
       });
       // Trigger repository scan on push
       break;
@@ -296,7 +296,11 @@ export async function scanRepositoryForVulnerabilities(
       path: '',
     });
 
-    logger.info('Scanning repository', { owner, repo, filesCount: Array.isArray(contents) ? contents.length : 1 });
+    logger.info('Scanning repository', {
+      owner,
+      repo,
+      filesCount: Array.isArray(contents) ? contents.length : 1,
+    });
 
     // Mock vulnerability scanning
     // In production, you would:
@@ -312,7 +316,7 @@ export async function scanRepositoryForVulnerabilities(
         type: 'sql-injection',
         file: 'src/auth.js',
         line: 42,
-        description: 'SQL Injection vulnerability detected in user authentication'
+        description: 'SQL Injection vulnerability detected in user authentication',
       },
       {
         id: `vuln-${Date.now()}-2`,
@@ -320,8 +324,8 @@ export async function scanRepositoryForVulnerabilities(
         type: 'xss',
         file: 'src/utils.js',
         line: 15,
-        description: 'Cross-Site Scripting (XSS) vulnerability in user input handling'
-      }
+        description: 'Cross-Site Scripting (XSS) vulnerability in user input handling',
+      },
     ];
 
     return {
@@ -335,7 +339,7 @@ export async function scanRepositoryForVulnerabilities(
     logger.error('Failed to scan repository', {
       owner,
       repo,
-      errorMessage: error instanceof Error ? error.message : String(error)
+      errorMessage: error instanceof Error ? error.message : String(error),
     });
     throw new ServiceUnavailableError('Failed to scan repository');
   }
@@ -369,9 +373,7 @@ export async function getRepoScanStatus(
 /**
  * Fetch user repositories with GitHub App installation status
  */
-export async function fetchUserRepositories(
-  username: string
-): Promise<{
+export async function fetchUserRepositories(username: string): Promise<{
   success: boolean;
   installed: boolean;
   repositories: any[];
@@ -389,7 +391,7 @@ export async function fetchUserRepositories(
 
     logger.info('Fetched user repositories', {
       username,
-      count: repos.length
+      count: repos.length,
     });
 
     // In production, check which repos have the GitHub App installed
@@ -398,7 +400,7 @@ export async function fetchUserRepositories(
     return {
       success: true,
       installed,
-      repositories: repos.map(repo => ({
+      repositories: repos.map((repo) => ({
         id: repo.id,
         name: repo.name,
         full_name: repo.full_name,
@@ -415,7 +417,7 @@ export async function fetchUserRepositories(
   } catch (error) {
     logger.error('Failed to fetch user repositories', {
       username,
-      errorMessage: error instanceof Error ? error.message : String(error)
+      errorMessage: error instanceof Error ? error.message : String(error),
     });
 
     return {
@@ -515,8 +517,8 @@ function parseExplanationResponse(response: string): {
   if (referencesMatch?.[1]) {
     sections.references = referencesMatch[1]
       .split('\n')
-      .filter(line => line.trim().startsWith('-'))
-      .map(line => line.replace(/^-\s*/, '').trim());
+      .filter((line) => line.trim().startsWith('-'))
+      .map((line) => line.replace(/^-\s*/, '').trim());
   }
 
   return sections;
@@ -573,13 +575,17 @@ function generatePRDescription(fixes: AIFixSuggestion[], userDescription: string
 
 ## Fixes Applied
 
-${fixes.map((fix, index) => `
+${fixes
+  .map(
+    (fix, index) => `
 ### ${index + 1}. Vulnerability: ${fix.vulnerabilityId}
 
 ${fix.explanation}
 
 **Confidence:** ${(fix.confidence * 100).toFixed(0)}%
-`).join('\n')}
+`
+  )
+  .join('\n')}
 
 ---
 *This PR was automatically generated by AI Service*

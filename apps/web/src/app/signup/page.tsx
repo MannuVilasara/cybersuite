@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { toast } from "react-hot-toast";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/stores/auth.store";
-import { authService } from "@/services/auth.service";
+import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/auth.store';
+import { authService } from '@/services/auth.service';
 
 const SignupPage = () => {
-  const [username, setusername] = useState("");
-  const [password, setpassword] = useState("");
-  const [email, setemail] = useState("");
+  const [username, setusername] = useState('');
+  const [password, setpassword] = useState('');
+  const [email, setemail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
@@ -22,17 +22,17 @@ const SignupPage = () => {
     e.preventDefault();
 
     if (!username.trim() || !email.trim() || !password.trim()) {
-      toast.error("All fields are required");
+      toast.error('All fields are required');
       return;
     }
 
     if (password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error('Password must be at least 6 characters');
       return;
     }
 
     if (!acceptedTerms) {
-      toast.error("Please accept the terms and conditions");
+      toast.error('Please accept the terms and conditions');
       return;
     }
 
@@ -43,21 +43,21 @@ const SignupPage = () => {
 
       setAuth(res.user, res.token);
 
-      setusername("");
-      setemail("");
-      setpassword("");
+      setusername('');
+      setemail('');
+      setpassword('');
 
-      router.push("/");
-      toast.success(res.message || "Account created successfully");
+      router.push('/');
+      toast.success(res.message || 'Account created successfully');
     } catch (err: unknown) {
       const errorMessage =
-        (err as { response?: { data?: { error?: { message?: string } } } })
-          .response?.data?.error?.message ||
+        (err as { response?: { data?: { error?: { message?: string } } } }).response?.data?.error
+          ?.message ||
         (err as Error).message ||
-        "Error signing up";
+        'Error signing up';
       toast.error(errorMessage);
       console.error(
-        "Registration error:",
+        'Registration error:',
         (err as { response?: { data?: unknown } }).response?.data || err
       );
     } finally {
@@ -111,28 +111,21 @@ const SignupPage = () => {
                 </span>
               </h1>
               <p className="text-xl text-gray-400 mb-6 max-w-md">
-                Advanced cybersecurity platform with enterprise-grade
-                authentication
+                Advanced cybersecurity platform with enterprise-grade authentication
               </p>
 
               <div className="space-y-3 text-left max-w-md">
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span className="text-gray-300">
-                    Multi-factor authentication
-                  </span>
+                  <span className="text-gray-300">Multi-factor authentication</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span className="text-gray-300">
-                    Email verification system
-                  </span>
+                  <span className="text-gray-300">Email verification system</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-white rounded-full"></div>
-                  <span className="text-gray-300">
-                    Enterprise security standards
-                  </span>
+                  <span className="text-gray-300">Enterprise security standards</span>
                 </div>
               </div>
             </div>
@@ -141,9 +134,7 @@ const SignupPage = () => {
           <div className="flex justify-center lg:justify-end">
             <div className="w-full max-w-md">
               <div className="backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 bg-[rgba(36,36,36,0.95)]">
-                <h2 className="text-2xl text-white font-bold mb-1 text-center">
-                  Create Account
-                </h2>
+                <h2 className="text-2xl text-white font-bold mb-1 text-center">Create Account</h2>
 
                 <p className="text-gray-400 text-sm text-center mb-8">
                   Enter your credentials to get started
@@ -188,7 +179,7 @@ const SignupPage = () => {
                       htmlFor="acceptTermsSignup"
                       className="text-gray-300 text-sm cursor-pointer"
                     >
-                      I agree to the{" "}
+                      I agree to the{' '}
                       <Link
                         href="/terms-and-conditions"
                         className="text-white hover:text-gray-300 underline"
@@ -231,7 +222,7 @@ const SignupPage = () => {
 
                 <div className="text-center mt-6 pt-6 border-t border-gray-700/30">
                   <p className="text-gray-400 text-sm">
-                    Already have an account?{" "}
+                    Already have an account?{' '}
                     <Link
                       href="/login"
                       className="text-white hover:text-gray-300 font-medium transition-colors duration-300"

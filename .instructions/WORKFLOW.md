@@ -5,26 +5,22 @@
 ### Task Execution Process
 
 1. **Read the Task**
-
    - Go to `TODOS.md` and find an unchecked task `[ ]`
    - Read the complete task description
    - Understand what needs to be done
 
 2. **Plan Your Approach**
-
    - Identify which files need to be created/modified
    - Think about how to minimize changes to existing files
    - Consider creating new files for new functionality
 
 3. **Execute the Task**
-
    - Work on **ONE task at a time** - no parallelism
    - Create new files whenever possible instead of editing existing ones
    - Write clean, readable, and maintainable code
    - Add comments for complex logic
 
 4. **Verify Your Work**
-
    - Test the functionality
    - Check for errors or warnings
    - Ensure code follows conventions in `CONVENTIONS.md`

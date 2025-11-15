@@ -103,9 +103,13 @@ export const authService = {
   },
 
   logout: async (): Promise<void> => {
-    await axios.post(`${env.API_URL}/auth/logout`, {}, {
-      withCredentials: true,
-    });
+    await axios.post(
+      `${env.API_URL}/auth/logout`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
   },
 
   getProfile: async (): Promise<AuthResponse['user']> => {
