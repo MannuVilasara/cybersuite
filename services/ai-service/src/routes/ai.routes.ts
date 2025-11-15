@@ -23,4 +23,28 @@ router.post('/fix', validateBody(aiFixSchema), aiController.generateFix);
  */
 router.post('/generate-pr', validateBody(aiGeneratePRSchema), aiController.generatePR);
 
+/**
+ * POST /api/ai/github/webhook
+ * Handle GitHub App installation and repository events
+ */
+router.post('/github/webhook', aiController.handleGitHubWebhook);
+
+/**
+ * POST /api/ai/scan-repository
+ * Scan a repository for vulnerabilities
+ */
+router.post('/scan-repository', aiController.scanRepository);
+
+/**
+ * GET /api/ai/repositories/:owner/:repo/status
+ * Get scanning status for a repository
+ */
+router.get('/repositories/:owner/:repo/status', aiController.getRepositoryStatus);
+
+/**
+ * GET /api/ai/user/:username/repositories
+ * Get all repositories for a GitHub user/org with installation status
+ */
+router.get('/user/:username/repositories', aiController.getUserRepositories);
+
 export default router;
