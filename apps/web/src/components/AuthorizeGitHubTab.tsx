@@ -59,11 +59,10 @@ const AuthorizeGitHubTab = () => {
 
     try {
       const result = await aiService.secureBotScan(repoId, githubUsername);
-      
-      toast.success(
-        `Found ${result.scan_results.summary.total} issues in ${repoName}`,
-        { id: toastId }
-      );
+
+      toast.success(`Found ${result.scan_results.summary.total} issues in ${repoName}`, {
+        id: toastId,
+      });
 
       // Update repository with scan results
       setRepositories((prev) =>
@@ -622,9 +621,7 @@ const AuthorizeGitHubTab = () => {
                                     Scanning...
                                   </>
                                 ) : (
-                                  <>
-                                    🔍 Scan
-                                  </>
+                                  <>🔍 Scan</>
                                 )}
                               </button>
 
@@ -657,9 +654,7 @@ const AuthorizeGitHubTab = () => {
                                     Fixing...
                                   </>
                                 ) : (
-                                  <>
-                                    🔧 Auto-Fix
-                                  </>
+                                  <>🔧 Auto-Fix</>
                                 )}
                               </button>
                             </div>

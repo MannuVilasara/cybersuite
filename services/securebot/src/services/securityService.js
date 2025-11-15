@@ -1,15 +1,15 @@
-import fs from "fs-extra";
-import { glob } from "glob";
-import path from "path";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from "dotenv";
+import fs from 'fs-extra';
+import { glob } from 'glob';
+import path from 'path';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
 class SecurityService {
   constructor() {
     if (!process.env.GOOGLE_AI_API_KEY) {
-      throw new Error("GOOGLE_AI_API_KEY not found in environment variables");
+      throw new Error('GOOGLE_AI_API_KEY not found in environment variables');
     }
 
     this.genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
@@ -18,7 +18,7 @@ class SecurityService {
   }
 
   async initializeAI() {
-    const modelNames = ["gemini-2.5-flash"];
+    const modelNames = ['gemini-2.5-flash'];
 
     for (const modelName of modelNames) {
       try {
@@ -31,7 +31,7 @@ class SecurityService {
     }
 
     if (!this.model) {
-      throw new Error("No available AI models found");
+      throw new Error('No available AI models found');
     }
   }
 
@@ -40,24 +40,18 @@ class SecurityService {
    */
   async scanRepository(repoPath) {
     try {
-      console.log("🔍 Security scan started for:", repoPath);
+      console.log('🔍 Security scan started for:', repoPath);
 
       const pathExists = await fs.pathExists(repoPath);
       if (!pathExists) {
-        throw new Error("Repository path does not exist");
+        throw new Error('Repository path does not exist');
       }
 
       // Scan for files
-      const files = await glob("**/*.*", {
+      const files = await glob('**/*.*', {
         cwd: repoPath,
         absolute: true,
-        ignore: [
-          "node_modules/**",
-          "dist/**",
-          "build/**",
-          ".git/**",
-          "repos/**",
-        ],
+        ignore: ['node_modules/**', 'dist/**', 'build/**', '.git/**', 'repos/**'],
         maxDepth: 10,
         nodir: true,
       });
@@ -73,67 +67,53 @@ class SecurityService {
 
           // Only scan code files
           if (
-            ![
-              ".js",
-              ".ts",
-              ".jsx",
-              ".tsx",
-              ".py",
-              ".java",
-              ".php",
-              ".rb",
-              ".go",
-              ".cs",
-            ].includes(ext)
+            !['.js', '.ts', '.jsx', '.tsx', '.py', '.java', '.php', '.rb', '.go', '.cs'].includes(
+              ext
+            )
           )
             continue;
 
           const stats = await fs.stat(file);
           if (stats.size > 1024 * 200) continue; // Skip files larger than 200KB
 
-          const content = await fs.readFile(file, "utf-8");
+          const content = await fs.readFile(file, 'utf-8');
           filesScanned++;
 
           // Check for eval() usage
           const evalMatches = content.match(/(?:^|[^\/\*\s]).*eval\s*\(/gm);
           if (
             evalMatches &&
-            !content.includes("ast.literal_eval") &&
-            !content.includes("status(400)") &&
-            !evalMatches.every((match) => match.trim().startsWith("//"))
+            !content.includes('ast.literal_eval') &&
+            !content.includes('status(400)') &&
+            !evalMatches.every((match) => match.trim().startsWith('//'))
           ) {
             issues.push({
               file: file,
               fileName: path.basename(file),
-              severity: "CRITICAL",
-              issue:
-                "🚨 eval() usage detected - potential code injection vulnerability",
-              type: "UNSAFE_EVAL",
+              severity: 'CRITICAL',
+              issue: '🚨 eval() usage detected - potential code injection vulnerability',
+              type: 'UNSAFE_EVAL',
               line: this.findLineNumber(content, evalMatches[0]),
             });
           }
 
           // Check for hardcoded secrets
           if (
-            content.match(
-              /(?:password|apikey|secret|token)\s*[:=]\s*["'][^"']{8,}["']/i
-            ) &&
-            !content.includes("REMOVED_FOR_SECURITY") &&
-            !content.includes("YOUR_API_KEY") &&
-            !content.includes("PLACEHOLDER") &&
-            !content.includes("example.com")
+            content.match(/(?:password|apikey|secret|token)\s*[:=]\s*["'][^"']{8,}["']/i) &&
+            !content.includes('REMOVED_FOR_SECURITY') &&
+            !content.includes('YOUR_API_KEY') &&
+            !content.includes('PLACEHOLDER') &&
+            !content.includes('example.com')
           ) {
             issues.push({
               file: file,
               fileName: path.basename(file),
-              severity: "CRITICAL",
-              issue: "🚨 Hardcoded credentials found - security risk",
-              type: "HARDCODED_SECRET",
+              severity: 'CRITICAL',
+              issue: '🚨 Hardcoded credentials found - security risk',
+              type: 'HARDCODED_SECRET',
               line: this.findLineNumber(
                 content,
-                content.match(
-                  /(?:password|apikey|secret|token)\s*[:=]\s*["'][^"']{8,}["']/i
-                )[0]
+                content.match(/(?:password|apikey|secret|token)\s*[:=]\s*["'][^"']{8,}["']/i)[0]
               ),
             });
           }
@@ -143,9 +123,9 @@ class SecurityService {
             issues.push({
               file: file,
               fileName: path.basename(file),
-              severity: "HIGH",
-              issue: "⚠️ SQL injection risk - dynamic query construction",
-              type: "SQL_INJECTION",
+              severity: 'HIGH',
+              issue: '⚠️ SQL injection risk - dynamic query construction',
+              type: 'SQL_INJECTION',
               line: this.findLineNumber(
                 content,
                 content.match(/(?:SELECT|INSERT|UPDATE|DELETE).*["']\s*\+/gi)[0]
@@ -158,9 +138,9 @@ class SecurityService {
             issues.push({
               file: file,
               fileName: path.basename(file),
-              severity: "MEDIUM",
-              issue: "🔓 Insecure HTTP request detected",
-              type: "INSECURE_HTTP",
+              severity: 'MEDIUM',
+              issue: '🔓 Insecure HTTP request detected',
+              type: 'INSECURE_HTTP',
               line: this.findLineNumber(
                 content,
                 content.match(/http:\/\/(?!localhost|127\.0\.0\.1)/gi)[0]
@@ -169,36 +149,30 @@ class SecurityService {
           }
 
           // Check for weak crypto
-          if (
-            content.match(/md5|sha1/gi) &&
-            !content.match(/sha256|sha512/gi)
-          ) {
+          if (content.match(/md5|sha1/gi) && !content.match(/sha256|sha512/gi)) {
             issues.push({
               file: file,
               fileName: path.basename(file),
-              severity: "MEDIUM",
-              issue: "🔐 Weak cryptographic hash detected",
-              type: "WEAK_CRYPTO",
-              line: this.findLineNumber(
-                content,
-                content.match(/md5|sha1/gi)[0]
-              ),
+              severity: 'MEDIUM',
+              issue: '🔐 Weak cryptographic hash detected',
+              type: 'WEAK_CRYPTO',
+              line: this.findLineNumber(content, content.match(/md5|sha1/gi)[0]),
             });
           }
 
           // Check for missing input validation
           if (
             content.match(/req\.(query|params|body)\.[a-zA-Z]+/) &&
-            !content.includes("validator") &&
-            !content.includes("validate") &&
-            !content.includes("sanitize")
+            !content.includes('validator') &&
+            !content.includes('validate') &&
+            !content.includes('sanitize')
           ) {
             issues.push({
               file: file,
               fileName: path.basename(file),
-              severity: "MEDIUM",
-              issue: "📝 Potential missing input validation",
-              type: "INPUT_VALIDATION",
+              severity: 'MEDIUM',
+              issue: '📝 Potential missing input validation',
+              type: 'INPUT_VALIDATION',
               line: this.findLineNumber(
                 content,
                 content.match(/req\.(query|params|body)\.[a-zA-Z]+/)[0]
@@ -211,9 +185,9 @@ class SecurityService {
       }
 
       const summary = {
-        critical: issues.filter((i) => i.severity === "CRITICAL").length,
-        high: issues.filter((i) => i.severity === "HIGH").length,
-        medium: issues.filter((i) => i.severity === "MEDIUM").length,
+        critical: issues.filter((i) => i.severity === 'CRITICAL').length,
+        high: issues.filter((i) => i.severity === 'HIGH').length,
+        medium: issues.filter((i) => i.severity === 'MEDIUM').length,
         total: issues.length,
       };
 
@@ -226,23 +200,16 @@ class SecurityService {
         summary: {
           ...summary,
           riskLevel:
-            summary.critical > 0
-              ? "HIGH_RISK"
-              : summary.high > 0
-              ? "MEDIUM_RISK"
-              : "LOW_RISK",
+            summary.critical > 0 ? 'HIGH_RISK' : summary.high > 0 ? 'MEDIUM_RISK' : 'LOW_RISK',
         },
         issues,
         recommendations:
           summary.total === 0
-            ? ["✅ No security issues found"]
-            : [
-                "🔧 Address security vulnerabilities",
-                "📚 Review code security practices",
-              ],
+            ? ['✅ No security issues found']
+            : ['🔧 Address security vulnerabilities', '📚 Review code security practices'],
       };
     } catch (err) {
-      console.error("❌ Scan error:", err);
+      console.error('❌ Scan error:', err);
       throw new Error(`Error during scan: ${err.message}`);
     }
   }
@@ -264,7 +231,7 @@ class SecurityService {
             successful: 0,
             failed: 0,
             skipped: 0,
-            successRate: "100%",
+            successRate: '100%',
           },
         };
       }
@@ -291,8 +258,8 @@ class SecurityService {
               file: filePath,
               fileName,
               issue: issue.issue,
-              status: "file_not_found",
-              reason: "File does not exist in repository",
+              status: 'file_not_found',
+              reason: 'File does not exist in repository',
             });
             continue;
           }
@@ -300,9 +267,7 @@ class SecurityService {
           const fileStats = await fs.stat(filePath);
           if (fileStats.size > maxFileSize) {
             console.warn(
-              `⏭️ Skipping large file (${Math.round(
-                fileStats.size / 1024
-              )}KB): ${fileName}`
+              `⏭️ Skipping large file (${Math.round(fileStats.size / 1024)}KB): ${fileName}`
             );
             skippedFiles.push({
               file: filePath,
@@ -317,16 +282,16 @@ class SecurityService {
 
           const fileExt = path.extname(filePath).toLowerCase();
           const binaryExtensions = [
-            ".jpg",
-            ".jpeg",
-            ".png",
-            ".gif",
-            ".pdf",
-            ".zip",
-            ".exe",
-            ".dll",
-            ".ico",
-            ".svg",
+            '.jpg',
+            '.jpeg',
+            '.png',
+            '.gif',
+            '.pdf',
+            '.zip',
+            '.exe',
+            '.dll',
+            '.ico',
+            '.svg',
           ];
           if (binaryExtensions.includes(fileExt)) {
             console.log(`⏭️ Skipping binary file: ${fileName}`);
@@ -334,7 +299,7 @@ class SecurityService {
               file: filePath,
               fileName,
               issue: issue.issue,
-              reason: "Binary file - cannot be processed",
+              reason: 'Binary file - cannot be processed',
             });
             continue;
           }
@@ -346,31 +311,24 @@ class SecurityService {
               file: filePath,
               fileName,
               issue: issue.issue,
-              reason: "Auto-generated or dependency file",
+              reason: 'Auto-generated or dependency file',
             });
             continue;
           }
 
-          const originalContent = await fs.readFile(filePath, "utf-8");
-          console.log(
-            `📖 Read ${originalContent.length} characters from ${fileName}`
-          );
+          const originalContent = await fs.readFile(filePath, 'utf-8');
+          console.log(`📖 Read ${originalContent.length} characters from ${fileName}`);
 
-          const fixedContent = await this.fixFileContent(
-            originalContent,
-            issue,
-            fileName,
-            fileExt
-          );
+          const fixedContent = await this.fixFileContent(originalContent, issue, fileName, fileExt);
 
           if (fixedContent === originalContent) {
-            console.log("ℹ️ No changes made by AI");
+            console.log('ℹ️ No changes made by AI');
             failedFixes.push({
               file: filePath,
               fileName,
               issue: issue.issue,
-              status: "no_changes",
-              reason: "AI determined no changes were needed",
+              status: 'no_changes',
+              reason: 'AI determined no changes were needed',
             });
             continue;
           }
@@ -382,7 +340,7 @@ class SecurityService {
               file: filePath,
               fileName,
               issue: issue.issue,
-              status: "validation_failed",
+              status: 'validation_failed',
               reason: validation.error,
             });
             continue;
@@ -393,13 +351,13 @@ class SecurityService {
           await fs.copyFile(filePath, backupPath);
           console.log(`💾 Created backup: ${path.basename(backupPath)}`);
 
-          await fs.writeFile(filePath, fixedContent, "utf-8");
+          await fs.writeFile(filePath, fixedContent, 'utf-8');
 
           appliedFixes.push({
             file: filePath,
             fileName,
             issue: issue.issue,
-            status: "fixed_by_ai",
+            status: 'fixed_by_ai',
             explanation: `Successfully fixed: ${issue.issue}`,
             backupCreated: backupPath,
             changes: {
@@ -410,16 +368,14 @@ class SecurityService {
           });
 
           console.log(`✅ Successfully fixed ${fileName}`);
-          console.log(
-            `📊 Size change: ${originalContent.length} → ${fixedContent.length} chars`
-          );
+          console.log(`📊 Size change: ${originalContent.length} → ${fixedContent.length} chars`);
         } catch (error) {
           console.error(`❌ Error processing ${fileName}:`, error.message);
           failedFixes.push({
             file: filePath,
             fileName,
             issue: issue.issue,
-            status: "processing_error",
+            status: 'processing_error',
             reason: error.message,
           });
         }
@@ -430,12 +386,10 @@ class SecurityService {
         successful: appliedFixes.length,
         failed: failedFixes.length,
         skipped: skippedFiles.length,
-        successRate: `${Math.round(
-          (appliedFixes.length / issues.length) * 100
-        )}%`,
+        successRate: `${Math.round((appliedFixes.length / issues.length) * 100)}%`,
       };
 
-      console.log("\n📊 Fixing Summary:");
+      console.log('\n📊 Fixing Summary:');
       console.log(`✅ Successful: ${summary.successful}`);
       console.log(`❌ Failed: ${summary.failed}`);
       console.log(`⏭️ Skipped: ${summary.skipped}`);
@@ -448,7 +402,7 @@ class SecurityService {
         summary,
       };
     } catch (error) {
-      console.error("❌ Fix processing error:", error);
+      console.error('❌ Fix processing error:', error);
       throw new Error(`Error processing fixes: ${error.message}`);
     }
   }
@@ -512,7 +466,7 @@ FIXED CONTENT:`;
     let cleaned = response.trim();
 
     // Remove code blocks if present
-    if (cleaned.includes("```")) {
+    if (cleaned.includes('```')) {
       const codeBlockRegex = /```[\w]*\n?([\s\S]*?)\n?```/;
       const match = cleaned.match(codeBlockRegex);
       if (match) {
@@ -522,10 +476,10 @@ FIXED CONTENT:`;
 
     // Remove common AI response prefixes
     const prefixes = [
-      "Here is the fixed content:",
-      "Fixed content:",
-      "FIXED CONTENT:",
-      "The corrected file content is:",
+      'Here is the fixed content:',
+      'Fixed content:',
+      'FIXED CONTENT:',
+      'The corrected file content is:',
       "Here's the corrected version:",
     ];
 
@@ -543,7 +497,7 @@ FIXED CONTENT:`;
    */
   validateFixedContent(content, fileExt) {
     try {
-      if (fileExt === ".json") {
+      if (fileExt === '.json') {
         JSON.parse(content);
       }
 
@@ -563,12 +517,12 @@ FIXED CONTENT:`;
    */
   shouldSkipFile(fileName, filePath) {
     const skipFiles = [
-      "package-lock.json",
-      "yarn.lock",
-      "pnpm-lock.yaml",
-      "composer.lock",
-      "Pipfile.lock",
-      "poetry.lock",
+      'package-lock.json',
+      'yarn.lock',
+      'pnpm-lock.yaml',
+      'composer.lock',
+      'Pipfile.lock',
+      'poetry.lock',
     ];
 
     const skipPatterns = [
@@ -581,10 +535,7 @@ FIXED CONTENT:`;
       /\/\.nuxt\//,
     ];
 
-    return (
-      skipFiles.includes(fileName) ||
-      skipPatterns.some((pattern) => pattern.test(filePath))
-    );
+    return skipFiles.includes(fileName) || skipPatterns.some((pattern) => pattern.test(filePath));
   }
 
   /**
@@ -594,7 +545,7 @@ FIXED CONTENT:`;
     if (!match) return 1;
 
     const beforeMatch = content.substring(0, content.indexOf(match));
-    return beforeMatch.split("\n").length;
+    return beforeMatch.split('\n').length;
   }
 }
 

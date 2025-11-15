@@ -28,7 +28,6 @@ SecureBot is an integrated application that combines GitHub App authentication w
 ## 📋 Prerequisites
 
 1. **GitHub App**: Create a GitHub App with the following permissions:
-
    - Repository permissions: Contents (Read & Write), Pull requests (Write), Metadata (Read)
    - Account permissions: None required
 
@@ -281,17 +280,14 @@ securebot/
 ### Common Issues
 
 1. **GitHub App Not Found**
-
    - Verify `GITHUB_APP_ID` is correct
    - Ensure the private key is properly formatted
 
 2. **Permission Denied**
-
    - Check if the GitHub App is installed on the repository
    - Verify repository permissions
 
 3. **AI Service Errors**
-
    - Validate `GOOGLE_AI_API_KEY` is correct
    - Check API quota limits
 
@@ -304,21 +300,21 @@ securebot/
 ```javascript
 // Check if app is installed
 const installationStatus = await fetch(
-  "http://localhost:3000/api/installation/status?username=myusername"
+  'http://localhost:3000/api/installation/status?username=myusername'
 );
 
 // Scan and fix repository
-const fixResult = await fetch("http://localhost:3000/api/fix", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
+const fixResult = await fetch('http://localhost:3000/api/fix', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     repoId: 123456789,
-    username: "myusername",
+    username: 'myusername',
   }),
 });
 
 const result = await fixResult.json();
-console.log("Pull Request created:", result.pull_request.html_url);
+console.log('Pull Request created:', result.pull_request.html_url);
 ```
 
 ## 🤝 Contributing

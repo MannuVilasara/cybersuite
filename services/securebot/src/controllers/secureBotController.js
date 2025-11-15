@@ -1,6 +1,6 @@
-import GitHubAppService from "../services/githubAppService.js";
-import RepositoryService from "../services/repositoryService.js";
-import SecurityService from "../services/securityService.js";
+import GitHubAppService from '../services/githubAppService.js';
+import RepositoryService from '../services/repositoryService.js';
+import SecurityService from '../services/securityService.js';
 
 class SecureBotController {
   constructor() {
@@ -19,7 +19,7 @@ class SecureBotController {
       if (!username) {
         return res.status(400).json({
           success: false,
-          error: "Username is required",
+          error: 'Username is required',
         });
       }
 
@@ -37,12 +37,10 @@ class SecureBotController {
         });
       }
 
-      const installation =
-        await this.githubAppService.getInstallationByUsername(username);
-      const repositories =
-        await this.githubAppService.getRepositoriesForInstallation(
-          installation.id
-        );
+      const installation = await this.githubAppService.getInstallationByUsername(username);
+      const repositories = await this.githubAppService.getRepositoriesForInstallation(
+        installation.id
+      );
 
       return res.json({
         success: true,
@@ -55,10 +53,10 @@ class SecureBotController {
         repository_count: repositories.length,
       });
     } catch (error) {
-      console.error("Error checking installation status:", error);
+      console.error('Error checking installation status:', error);
       return res.status(500).json({
         success: false,
-        error: "Failed to check installation status",
+        error: 'Failed to check installation status',
         message: error.message,
       });
     }
@@ -74,7 +72,7 @@ class SecureBotController {
       if (!username) {
         return res.status(400).json({
           success: false,
-          error: "Username is required",
+          error: 'Username is required',
         });
       }
 
@@ -96,12 +94,10 @@ class SecureBotController {
       }
 
       // Get installation and repositories
-      const installation =
-        await this.githubAppService.getInstallationByUsername(username);
-      const repositories =
-        await this.githubAppService.getRepositoriesForInstallation(
-          installation.id
-        );
+      const installation = await this.githubAppService.getInstallationByUsername(username);
+      const repositories = await this.githubAppService.getRepositoriesForInstallation(
+        installation.id
+      );
 
       // Format repositories with additional security info
       const formattedRepos = repositories.map((repo) => ({
@@ -141,10 +137,10 @@ class SecureBotController {
         repository_count: formattedRepos.length,
       });
     } catch (error) {
-      console.error("Error getting user repositories:", error);
+      console.error('Error getting user repositories:', error);
       return res.status(500).json({
         success: false,
-        error: "Failed to get user repositories",
+        error: 'Failed to get user repositories',
         message: error.message,
       });
     }
@@ -160,7 +156,7 @@ class SecureBotController {
       if (!repoId || !username) {
         return res.status(400).json({
           success: false,
-          error: "Repository ID and username are required",
+          error: 'Repository ID and username are required',
         });
       }
 
@@ -170,7 +166,7 @@ class SecureBotController {
         const installUrl = this.githubAppService.getInstallationUrl();
         return res.status(403).json({
           success: false,
-          error: "GitHub App not installed",
+          error: 'GitHub App not installed',
           install_url: installUrl,
         });
       }
@@ -181,13 +177,11 @@ class SecureBotController {
 
       // Scan for security issues
       console.log(`🔍 Scanning repository: ${cloneResult.repository.name}`);
-      const scanResults = await this.securityService.scanRepository(
-        cloneResult.localPath
-      );
+      const scanResults = await this.securityService.scanRepository(cloneResult.localPath);
 
       return res.json({
         success: true,
-        message: "Repository scanned successfully",
+        message: 'Repository scanned successfully',
         repository: {
           id: cloneResult.repository.id,
           name: cloneResult.repository.name,
@@ -198,10 +192,10 @@ class SecureBotController {
         clone_action: cloneResult.action,
       });
     } catch (error) {
-      console.error("Error scanning repository:", error);
+      console.error('Error scanning repository:', error);
       return res.status(500).json({
         success: false,
-        error: "Failed to scan repository",
+        error: 'Failed to scan repository',
         message: error.message,
       });
     }
@@ -218,7 +212,7 @@ class SecureBotController {
       if (!repoId || !username) {
         return res.status(400).json({
           success: false,
-          error: "Repository ID and username are required",
+          error: 'Repository ID and username are required',
         });
       }
 
@@ -232,7 +226,7 @@ class SecureBotController {
         const installUrl = this.githubAppService.getInstallationUrl();
         return res.status(403).json({
           success: false,
-          error: "GitHub App not installed",
+          error: 'GitHub App not installed',
           install_url: installUrl,
         });
       }
@@ -243,14 +237,12 @@ class SecureBotController {
 
       // Scan for security issues
       console.log(`🔍 Scanning repository: ${cloneResult.repository.name}`);
-      const scanResults = await this.securityService.scanRepository(
-        cloneResult.localPath
-      );
+      const scanResults = await this.securityService.scanRepository(cloneResult.localPath);
 
       if (scanResults.issues.length === 0) {
         return res.json({
           success: true,
-          message: "No security issues found",
+          message: 'No security issues found',
           repository: {
             id: cloneResult.repository.id,
             name: cloneResult.repository.name,
@@ -272,7 +264,7 @@ class SecureBotController {
       if (fixResults.appliedFixes.length === 0) {
         return res.json({
           success: true,
-          message: "No fixes could be applied automatically",
+          message: 'No fixes could be applied automatically',
           repository: {
             id: cloneResult.repository.id,
             name: cloneResult.repository.name,
@@ -288,21 +280,16 @@ class SecureBotController {
       const branchName = `securebot-fixes-${Date.now()}`;
       console.log(`🌿 Creating branch: ${branchName}`);
 
-      await this.repositoryService.createFixBranch(
-        cloneResult.localPath,
-        branchName
-      );
+      await this.repositoryService.createFixBranch(cloneResult.localPath, branchName);
 
       const commitResult = await this.repositoryService.commitAndPushChanges(
         cloneResult.localPath,
         branchName,
-        `🔒 SecureBot: Fix ${
-          fixResults.appliedFixes.length
-        } security vulnerabilities
+        `🔒 SecureBot: Fix ${fixResults.appliedFixes.length} security vulnerabilities
 
 - Fixed ${fixResults.summary.successful} security issues
 - Success rate: ${fixResults.summary.successRate}
-- Issues addressed: ${fixResults.appliedFixes.map((f) => f.issue).join(", ")}
+- Issues addressed: ${fixResults.appliedFixes.map((f) => f.issue).join(', ')}
 
 Automated security fixes by SecureBot`
       );
@@ -310,7 +297,7 @@ Automated security fixes by SecureBot`
       if (!commitResult.hasChanges) {
         return res.json({
           success: true,
-          message: "No changes to commit",
+          message: 'No changes to commit',
           repository: {
             id: cloneResult.repository.id,
             name: cloneResult.repository.name,
@@ -333,7 +320,7 @@ Automated security fixes by SecureBot`
 
       return res.json({
         success: true,
-        message: "Security fixes applied and pull request created successfully",
+        message: 'Security fixes applied and pull request created successfully',
         repository: {
           id: cloneResult.repository.id,
           name: cloneResult.repository.name,
@@ -358,33 +345,30 @@ Automated security fixes by SecureBot`
         },
       });
     } catch (error) {
-      console.error("Error fixing repository and creating PR:", error);
+      console.error('Error fixing repository and creating PR:', error);
 
       // Handle specific error types
-      if (error.message.includes("GOOGLE_AI_API_KEY")) {
+      if (error.message.includes('GOOGLE_AI_API_KEY')) {
         return res.status(500).json({
           success: false,
-          error: "AI service configuration error",
-          message: "Google AI API key is missing or invalid",
-          solution: "Please set GOOGLE_AI_API_KEY in your .env file",
+          error: 'AI service configuration error',
+          message: 'Google AI API key is missing or invalid',
+          solution: 'Please set GOOGLE_AI_API_KEY in your .env file',
         });
       }
 
-      if (
-        error.message.includes("quota") ||
-        error.message.includes("rate limit")
-      ) {
+      if (error.message.includes('quota') || error.message.includes('rate limit')) {
         return res.status(429).json({
           success: false,
-          error: "AI service rate limit exceeded",
+          error: 'AI service rate limit exceeded',
           message: error.message,
-          solution: "Please try again in a few minutes",
+          solution: 'Please try again in a few minutes',
         });
       }
 
       return res.status(500).json({
         success: false,
-        error: "Failed to fix repository and create PR",
+        error: 'Failed to fix repository and create PR',
         message: error.message,
       });
     }
@@ -403,10 +387,10 @@ Automated security fixes by SecureBot`
         cloned_repositories: clonedRepos,
       });
     } catch (error) {
-      console.error("Error getting cloned repositories:", error);
+      console.error('Error getting cloned repositories:', error);
       return res.status(500).json({
         success: false,
-        error: "Failed to get cloned repositories",
+        error: 'Failed to get cloned repositories',
         message: error.message,
       });
     }

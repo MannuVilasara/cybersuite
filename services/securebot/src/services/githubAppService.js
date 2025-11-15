@@ -1,5 +1,5 @@
-import { App } from "octokit";
-import dotenv from "dotenv";
+import { App } from 'octokit';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -7,7 +7,7 @@ class GitHubAppService {
   constructor() {
     if (!process.env.GITHUB_APP_ID || !process.env.GITHUB_PRIVATE_KEY) {
       throw new Error(
-        "GitHub App configuration missing. Please set GITHUB_APP_ID and GITHUB_PRIVATE_KEY in your .env file"
+        'GitHub App configuration missing. Please set GITHUB_APP_ID and GITHUB_PRIVATE_KEY in your .env file'
       );
     }
 
@@ -22,8 +22,7 @@ class GitHubAppService {
    */
   async getInstallations() {
     try {
-      const { data: installations } =
-        await this.githubApp.octokit.rest.apps.listInstallations();
+      const { data: installations } = await this.githubApp.octokit.rest.apps.listInstallations();
       return installations.map((installation) => ({
         id: installation.id,
         account: {
@@ -46,8 +45,7 @@ class GitHubAppService {
     try {
       const installations = await this.getInstallations();
       return installations.some(
-        (installation) =>
-          installation.account.login.toLowerCase() === username.toLowerCase()
+        (installation) => installation.account.login.toLowerCase() === username.toLowerCase()
       );
     } catch (error) {
       throw new Error(`Failed to check app installation: ${error.message}`);
@@ -61,13 +59,10 @@ class GitHubAppService {
     try {
       const installations = await this.getInstallations();
       return installations.find(
-        (installation) =>
-          installation.account.login.toLowerCase() === username.toLowerCase()
+        (installation) => installation.account.login.toLowerCase() === username.toLowerCase()
       );
     } catch (error) {
-      throw new Error(
-        `Failed to get installation for ${username}: ${error.message}`
-      );
+      throw new Error(`Failed to get installation for ${username}: ${error.message}`);
     }
   }
 
@@ -76,11 +71,8 @@ class GitHubAppService {
    */
   async getRepositoriesForInstallation(installationId) {
     try {
-      const octokit = await this.githubApp.getInstallationOctokit(
-        installationId
-      );
-      const { data: repoData } =
-        await octokit.rest.apps.listReposAccessibleToInstallation();
+      const octokit = await this.githubApp.getInstallationOctokit(installationId);
+      const { data: repoData } = await octokit.rest.apps.listReposAccessibleToInstallation();
 
       return repoData.repositories.map((repo) => ({
         id: repo.id,
@@ -110,9 +102,7 @@ class GitHubAppService {
 
       for (const installation of installations) {
         try {
-          const repositories = await this.getRepositoriesForInstallation(
-            installation.id
-          );
+          const repositories = await this.getRepositoriesForInstallation(installation.id);
           allRepositories.push({
             installation,
             repositories,
@@ -140,9 +130,7 @@ class GitHubAppService {
 
       for (const installation of installations) {
         try {
-          const repositories = await this.getRepositoriesForInstallation(
-            installation.id
-          );
+          const repositories = await this.getRepositoriesForInstallation(installation.id);
           const foundRepo = repositories.find((repo) => repo.id === repoId);
 
           if (foundRepo) {
@@ -170,13 +158,10 @@ class GitHubAppService {
    */
   async getInstallationToken(installationId) {
     try {
-      const octokit = await this.githubApp.getInstallationOctokit(
-        installationId
-      );
-      const { data: tokenData } =
-        await octokit.rest.apps.createInstallationAccessToken({
-          installation_id: installationId,
-        });
+      const octokit = await this.githubApp.getInstallationOctokit(installationId);
+      const { data: tokenData } = await octokit.rest.apps.createInstallationAccessToken({
+        installation_id: installationId,
+      });
 
       return tokenData.token;
     } catch (error) {
@@ -198,12 +183,7 @@ class GitHubAppService {
   /**
    * Create a pull request
    */
-  async createPullRequest(
-    installationId,
-    owner,
-    repo,
-    { title, head, base, body }
-  ) {
+  async createPullRequest(installationId, owner, repo, { title, head, base, body }) {
     try {
       const octokit = await this.getInstallationOctokit(installationId);
 

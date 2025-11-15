@@ -1,11 +1,11 @@
-import fs from "fs-extra";
-import { execSync } from "child_process";
-import path from "path";
+import fs from 'fs-extra';
+import { execSync } from 'child_process';
+import path from 'path';
 
 class RepositoryService {
   constructor(githubAppService) {
     this.githubAppService = githubAppService;
-    this.reposDir = path.join(process.cwd(), "repos");
+    this.reposDir = path.join(process.cwd(), 'repos');
     this.ensureReposDirectory();
   }
 
@@ -23,9 +23,7 @@ class RepositoryService {
       const repoInfo = await this.githubAppService.findRepositoryById(repoId);
 
       if (!repoInfo) {
-        throw new Error(
-          `Repository with ID ${repoId} not found in accessible repositories`
-        );
+        throw new Error(`Repository with ID ${repoId} not found in accessible repositories`);
       }
 
       const { repository, installation } = repoInfo;
@@ -33,32 +31,25 @@ class RepositoryService {
 
       // Check if repository already exists
       if (fs.existsSync(repoPath)) {
-        console.log(
-          `Repository ${repository.name} already exists, pulling latest changes...`
-        );
+        console.log(`Repository ${repository.name} already exists, pulling latest changes...`);
         await this.pullLatestChanges(repoPath);
         return {
           repository,
           installation,
           localPath: repoPath,
-          action: "updated",
+          action: 'updated',
         };
       }
 
       // Get installation token for authenticated cloning
-      const token = await this.githubAppService.getInstallationToken(
-        installation.id
-      );
+      const token = await this.githubAppService.getInstallationToken(installation.id);
 
       // Clone the repository using git with token authentication
-      const cloneUrl = repository.clone_url.replace(
-        "https://",
-        `https://x-access-token:${token}@`
-      );
+      const cloneUrl = repository.clone_url.replace('https://', `https://x-access-token:${token}@`);
 
       console.log(`Cloning repository: ${repository.full_name}`);
       execSync(`git clone ${cloneUrl} "${repoPath}"`, {
-        stdio: "inherit",
+        stdio: 'inherit',
         cwd: this.reposDir,
       });
 
@@ -66,7 +57,7 @@ class RepositoryService {
         repository,
         installation,
         localPath: repoPath,
-        action: "cloned",
+        action: 'cloned',
         cloned_at: new Date().toISOString(),
       };
     } catch (error) {
@@ -79,8 +70,8 @@ class RepositoryService {
    */
   async pullLatestChanges(repoPath) {
     try {
-      execSync("git pull origin", {
-        stdio: "inherit",
+      execSync('git pull origin', {
+        stdio: 'inherit',
         cwd: repoPath,
       });
       console.log(`Updated repository at ${repoPath}`);
@@ -93,20 +84,17 @@ class RepositoryService {
   /**
    * Create a new branch for fixes
    */
-  async createFixBranch(
-    repoPath,
-    branchName = `securebot-fixes-${Date.now()}`
-  ) {
+  async createFixBranch(repoPath, branchName = `securebot-fixes-${Date.now()}`) {
     try {
       // Ensure we're on the default branch and up to date
-      execSync("git checkout main || git checkout master", {
-        stdio: "pipe",
+      execSync('git checkout main || git checkout master', {
+        stdio: 'pipe',
         cwd: repoPath,
       });
 
       // Create and checkout new branch
       execSync(`git checkout -b ${branchName}`, {
-        stdio: "inherit",
+        stdio: 'inherit',
         cwd: repoPath,
       });
 
@@ -122,17 +110,17 @@ class RepositoryService {
   async commitAndPushChanges(
     repoPath,
     branchName,
-    commitMessage = "🔒 SecureBot: Fix security vulnerabilities"
+    commitMessage = '🔒 SecureBot: Fix security vulnerabilities'
   ) {
     try {
       // Configure git user if not already configured
       try {
         execSync('git config user.name "SecureBot"', {
-          stdio: "pipe",
+          stdio: 'pipe',
           cwd: repoPath,
         });
         execSync('git config user.email "securebot@automated.fix"', {
-          stdio: "pipe",
+          stdio: 'pipe',
           cwd: repoPath,
         });
       } catch (configError) {
@@ -140,38 +128,38 @@ class RepositoryService {
       }
 
       // Add all changes
-      execSync("git add .", {
-        stdio: "inherit",
+      execSync('git add .', {
+        stdio: 'inherit',
         cwd: repoPath,
       });
 
       // Check if there are changes to commit
       try {
-        execSync("git diff --staged --quiet", {
-          stdio: "pipe",
+        execSync('git diff --staged --quiet', {
+          stdio: 'pipe',
           cwd: repoPath,
         });
         // No changes to commit
-        return { hasChanges: false, message: "No changes to commit" };
+        return { hasChanges: false, message: 'No changes to commit' };
       } catch (diffError) {
         // There are changes to commit
       }
 
       // Commit changes
       execSync(`git commit -m "${commitMessage}"`, {
-        stdio: "inherit",
+        stdio: 'inherit',
         cwd: repoPath,
       });
 
       // Push to remote
       execSync(`git push origin ${branchName}`, {
-        stdio: "inherit",
+        stdio: 'inherit',
         cwd: repoPath,
       });
 
       return {
         hasChanges: true,
-        message: "Changes committed and pushed successfully",
+        message: 'Changes committed and pushed successfully',
         branch: branchName,
       };
     } catch (error) {
@@ -184,9 +172,9 @@ class RepositoryService {
    */
   async createPullRequest(repository, installation, branchName, fixResults) {
     try {
-      const [owner, repo] = repository.full_name.split("/");
+      const [owner, repo] = repository.full_name.split('/');
 
-      const title = "🔒 SecureBot: Automated Security Fixes";
+      const title = '🔒 SecureBot: Automated Security Fixes';
       const body = this.generatePullRequestBody(fixResults);
 
       const pullRequest = await this.githubAppService.createPullRequest(
@@ -196,7 +184,7 @@ class RepositoryService {
         {
           title,
           head: branchName,
-          base: repository.default_branch || "main",
+          base: repository.default_branch || 'main',
           body,
         }
       );
