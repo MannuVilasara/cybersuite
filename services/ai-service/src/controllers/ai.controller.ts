@@ -51,7 +51,8 @@ export const generateFix = asyncHandler(async (req: Request, res: Response, next
  * Create a pull request with fixes
  */
 export const generatePR = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const { vulnerabilityIds, title, description, repositoryUrl, owner, repo } = req.body;
+  const { vulnerabilityIds, title, description, repositoryUrl, owner, repo, installationId } =
+    req.body;
 
   logger.info('Generating pull request', {
     vulnerabilityIds,
@@ -60,7 +61,11 @@ export const generatePR = asyncHandler(async (req: Request, res: Response, next:
     repo,
   });
 
-  const pr: AutoPR = await createPullRequest(vulnerabilityIds, title, description, { owner, repo });
+  const pr: AutoPR = await createPullRequest(vulnerabilityIds, title, description, {
+    owner,
+    repo,
+    installationId,
+  });
 
   const response = successResponse(pr, 201);
   res.status(response.statusCode).json(response.data);
@@ -128,14 +133,19 @@ export const getRepositoryStatus = asyncHandler(
 export const getUserRepositories = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { username } = req.params;
+    const { installationId } = req.body;
 
     if (!username) {
       throw new Error('Username parameter is required');
     }
 
-    logger.info('Fetching user repositories', { username });
+    if (!installationId) {
+      throw new Error('Installation ID is required');
+    }
 
-    const repositories = await fetchUserRepositories(username);
+    logger.info('Fetching user repositories', { username, installationId });
+
+    const repositories = await fetchUserRepositories(username, installationId);
 
     const response = successResponse(repositories, 200);
     res.status(response.statusCode).json(response.data);
