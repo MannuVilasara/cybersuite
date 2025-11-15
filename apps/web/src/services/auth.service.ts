@@ -1,6 +1,18 @@
 import axios from 'axios';
 import { env } from '@/lib/env';
 
+export interface User {
+  _id: string;
+  email: string;
+  username: string;
+  name?: string;
+  role: 'user' | 'admin' | 'serviceProvider';
+  emailVerified?: boolean;
+  verified?: boolean;
+  createdAt?: string;
+  loginHistory?: any[];
+}
+
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -19,7 +31,7 @@ export interface AuthResponse {
 }
 
 interface RegisterResponse {
-  newUser: User;
+  user: User;
   token: string;
   message?: string;
 }
