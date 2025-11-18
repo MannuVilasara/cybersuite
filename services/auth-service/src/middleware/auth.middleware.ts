@@ -5,10 +5,12 @@
 import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AuthenticationError, AuthorizationError } from '@cybersec/utils';
-import type { User, UserRole, Session } from '@cybersec/types';
+import type { User, UserRole } from '@cybersec/types';
+import { verifyToken } from '../lib/auth-utils.js';
+import type { JWTPayload } from '../lib/auth-utils.js';
 
 export interface AuthRequest extends Request {
-  user?: User;
+  user?: Partial<User> & { id: string; email: string; role: UserRole };
 }
 
 export function authenticate(req: AuthRequest, _res: Response, next: NextFunction) {
@@ -26,8 +28,19 @@ export function authenticate(req: AuthRequest, _res: Response, next: NextFunctio
       throw new Error('JWT_SECRET not configured');
     }
 
-    const decoded = jwt.verify(token, secret) as Session;
-    req.body.sessionId = decoded.userId;
+    // prefer to use our verifyToken helper which returns a consistent JWTPayload
+    // so we avoid casting jwt.verify output directly to session shapes
+    const decoded = (verifyToken(token) as JWTPayload | null);
+    if (!decoded) {
+      throw new AuthenticationError('Invalid authentication token');
+    }
+
+    // Attach minimal user info to request for downstream handlers
+    req.user = {
+      id: decoded.userId,
+      email: decoded.email,
+      role: decoded.role as UserRole,
+    };
     next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {

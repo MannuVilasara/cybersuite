@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import type { StringValue } from 'ms';
 import { createLogger } from '@cybersec/utils';
 import { LogLevel } from '@cybersec/types';
+import { Session } from 'inspector';
 
 const logger = createLogger({
   service: 'auth-utils',
@@ -46,7 +47,7 @@ export const generateToken = (user: UserData): string => {
 
   return jwt.sign(payload, JWT_SECRET, {
     expiresIn: JWT_EXPIRES_IN,
-  });
+  })
 };
 
 export const generateRefreshToken = (userId: string): string => {

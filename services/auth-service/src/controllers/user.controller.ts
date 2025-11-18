@@ -275,8 +275,7 @@ export const changePassword = asyncHandler(
 
 export const getLoginHistory = asyncHandler(
   async (req: AuthRequest, res: Response, _next: NextFunction) => {
-    const userId = req.body.sessionId;
-    console.log('request aagi oyeeeeeee!!', userId);
+    const userId = req.user?.id;
 
     if (!userId) {
       throw new AuthenticationError('User not authenticated');

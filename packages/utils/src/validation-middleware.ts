@@ -19,7 +19,7 @@ export function validateRequest<T extends z.ZodType>(schema: T, source: Validate
       const result = schema.safeParse(data);
 
       if (!result.success) {
-        const errors = result.error.errors.map((err) => ({
+        const errors = result.error.issues.map((err: z.ZodIssue) => ({
           field: err.path.join('.'),
           message: err.message,
           code: err.code,
@@ -74,7 +74,7 @@ export function validateMultiple(validations: {
       if (validations.body) {
         const bodyResult = validations.body.safeParse(req.body);
         if (!bodyResult.success) {
-          bodyResult.error.errors.forEach((err) => {
+          bodyResult.error.issues.forEach((err: z.ZodIssue) => {
             errors.push({
               source: 'body',
               field: err.path.join('.'),
@@ -90,7 +90,7 @@ export function validateMultiple(validations: {
       if (validations.query) {
         const queryResult = validations.query.safeParse(req.query);
         if (!queryResult.success) {
-          queryResult.error.errors.forEach((err) => {
+          queryResult.error.issues.forEach((err: z.ZodIssue) => {
             errors.push({
               source: 'query',
               field: err.path.join('.'),
@@ -98,7 +98,7 @@ export function validateMultiple(validations: {
             });
           });
         } else {
-          req.query = queryResult.data;
+          req.query = queryResult.data as any;
         }
       }
 
@@ -106,7 +106,7 @@ export function validateMultiple(validations: {
       if (validations.params) {
         const paramsResult = validations.params.safeParse(req.params);
         if (!paramsResult.success) {
-          paramsResult.error.errors.forEach((err) => {
+          paramsResult.error.issues.forEach((err: z.ZodIssue) => {
             errors.push({
               source: 'params',
               field: err.path.join('.'),
@@ -114,7 +114,7 @@ export function validateMultiple(validations: {
             });
           });
         } else {
-          req.params = paramsResult.data;
+          req.params = paramsResult.data as any;
         }
       }
 
