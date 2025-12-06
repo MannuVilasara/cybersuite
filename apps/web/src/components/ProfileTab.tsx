@@ -30,7 +30,7 @@ const ProfileTab = () => {
         return;
       }
 
-      const response = await axios.get(`http://localhost:3001/api/users/login-history`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_GATEWAY_URL}/auth/users/login-history`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
