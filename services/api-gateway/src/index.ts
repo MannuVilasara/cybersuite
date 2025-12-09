@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './routes/auth-gateway.routes.ts';
+import aiserviceRoutes from './routes/aiservice-gateway.routes.ts';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/ai',aiserviceRoutes)
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'api-gateway' });
