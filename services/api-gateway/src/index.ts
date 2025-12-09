@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/ai',aiserviceRoutes)
+app.use('/api/ai', aiserviceRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'api-gateway' });

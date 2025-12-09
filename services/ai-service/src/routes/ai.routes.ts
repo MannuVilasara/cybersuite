@@ -11,7 +11,6 @@ const router = Router();
  */
 router.post('/explain', validateBody(aiExplainSchema), aiController.explainVulnerability);
 
-
 /**
  * POST /api/ai/fix
  * Generate a code fix for a vulnerability
