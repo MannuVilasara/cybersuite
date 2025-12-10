@@ -30,7 +30,7 @@ class RepositoryService {
             repoId: repoId,
             username: 'unknown',
             status: 'failed',
-            message: `Repository with ID ${repoId} not found in accessible repositories`
+            message: `Repository with ID ${repoId} not found in accessible repositories`,
           });
         }
         throw new Error(`Repository with ID ${repoId} not found in accessible repositories`);
@@ -48,7 +48,7 @@ class RepositoryService {
             repoId: repoId,
             username: installation.account?.login || 'unknown',
             status: 'cloning',
-            message: `Repository ${repository.name} already exists, pulling latest changes`
+            message: `Repository ${repository.name} already exists, pulling latest changes`,
           });
         }
         await this.pullLatestChanges(repoPath);
@@ -58,7 +58,7 @@ class RepositoryService {
             repoId: repoId,
             username: installation.account?.login || 'unknown',
             status: 'cloning',
-            message: `Repository ${repository.name} updated successfully`
+            message: `Repository ${repository.name} updated successfully`,
           });
         }
         return {
@@ -82,10 +82,10 @@ class RepositoryService {
           repoId: repoId,
           username: installation.account?.login || 'unknown',
           status: 'cloning',
-          message: `Started cloning repository: ${repository.full_name}`
+          message: `Started cloning repository: ${repository.full_name}`,
         });
       }
-      
+
       execSync(`git clone ${cloneUrl} "${repoPath}"`, {
         stdio: 'inherit',
         cwd: this.reposDir,
@@ -97,7 +97,7 @@ class RepositoryService {
           repoId: repoId,
           username: installation.account?.login || 'unknown',
           status: 'cloning',
-          message: `Successfully cloned repository: ${repository.full_name}`
+          message: `Successfully cloned repository: ${repository.full_name}`,
         });
       }
 
@@ -203,10 +203,10 @@ class RepositoryService {
 
       // Get installation token for authenticated push
       const token = await this.githubAppService.getInstallationToken(installationId);
-      
+
       // Set up authenticated remote URL for push
       const pushUrl = `https://x-access-token:${token}@github.com/${repositoryFullName}.git`;
-      
+
       // Push to remote using authenticated URL
       execSync(`git push ${pushUrl} ${branchName}`, {
         stdio: 'inherit',

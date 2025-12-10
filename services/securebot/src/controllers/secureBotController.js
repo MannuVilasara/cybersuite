@@ -155,11 +155,16 @@ class SecureBotController {
   async scanRepository(req, res) {
     try {
       const { repoId, username } = req.body;
-      this.scanLogs=[]; //clear previous logs
-
+      this.scanLogs = []; //clear previous logs
 
       if (!repoId || !username) {
-        this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"failed",message:"Repository ID and username are required"});
+        this.scanLogs.push({
+          timestamp: new Date(),
+          repoId: repoId,
+          username: username,
+          status: 'failed',
+          message: 'Repository ID and username are required',
+        });
         return res.status(400).json({
           success: false,
           error: 'Repository ID and username are required',
@@ -170,7 +175,13 @@ class SecureBotController {
       const isInstalled = await this.githubAppService.isAppInstalled(username);
       if (!isInstalled) {
         const installUrl = this.githubAppService.getInstallationUrl();
-        this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"failed",message:"GitHub App not installed"});
+        this.scanLogs.push({
+          timestamp: new Date(),
+          repoId: repoId,
+          username: username,
+          status: 'failed',
+          message: 'GitHub App not installed',
+        });
         return res.status(403).json({
           success: false,
           error: 'GitHub App not installed',
@@ -186,7 +197,13 @@ class SecureBotController {
       console.log(`🔍 Scanning repository: ${cloneResult.repository.name}`);
       this.currentRepoId = repoId;
       this.currentUsername = username;
-      this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"scanning",message:"Starting security scan"});  
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: repoId,
+        username: username,
+        status: 'scanning',
+        message: 'Starting security scan',
+      });
       const scanResults = await this.securityService.scanRepository(cloneResult.localPath);
       return res.json({
         success: true,
@@ -202,7 +219,13 @@ class SecureBotController {
       });
     } catch (error) {
       console.error('Error scanning repository:', error);
-      this.scanLogs.push({timestamp:new Date(),repoId:req.body.repoId,username:req.body.username,status:"failed",message:error.message});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: req.body.repoId,
+        username: req.body.username,
+        status: 'failed',
+        message: error.message,
+      });
       return res.status(500).json({
         success: false,
         error: 'Failed to scan repository',
@@ -221,7 +244,13 @@ class SecureBotController {
       this.scanLogs = []; // Clear previous logs
 
       if (!repoId || !username) {
-        this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"failed",message:"Repository ID and username are required"});
+        this.scanLogs.push({
+          timestamp: new Date(),
+          repoId: repoId,
+          username: username,
+          status: 'failed',
+          message: 'Repository ID and username are required',
+        });
         return res.status(400).json({
           success: false,
           error: 'Repository ID and username are required',
@@ -245,19 +274,43 @@ class SecureBotController {
 
       // Clone repository if not already cloned
       console.log(`🔄 Preparing repository with ID: ${repoId}`);
-      this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"cloning",message:"Cloning repository"});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: repoId,
+        username: username,
+        status: 'cloning',
+        message: 'Cloning repository',
+      });
       const cloneResult = await this.repositoryService.cloneRepository(repoId);
 
       // Scan for security issues
-      console.log(`🔍 Scanning repository: ${cloneResult.repository.name}`);  
-      this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"scanning",message:"Starting security scan"});
+      console.log(`🔍 Scanning repository: ${cloneResult.repository.name}`);
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: repoId,
+        username: username,
+        status: 'scanning',
+        message: 'Starting security scan',
+      });
       this.currentRepoId = repoId;
       this.currentUsername = username;
-      this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"scanning",message:"Starting security scan"});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: repoId,
+        username: username,
+        status: 'scanning',
+        message: 'Starting security scan',
+      });
       const scanResults = await this.securityService.scanRepository(cloneResult.localPath);
 
       if (scanResults.issues.length === 0) {
-        this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"completed",message:"No security issues found"});
+        this.scanLogs.push({
+          timestamp: new Date(),
+          repoId: repoId,
+          username: username,
+          status: 'completed',
+          message: 'No security issues found',
+        });
         return res.json({
           success: true,
           message: 'No security issues found',
@@ -274,14 +327,26 @@ class SecureBotController {
 
       // Apply fixes
       console.log(`🔧 Fixing ${scanResults.issues.length} security issues`);
-      this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"fixing",message:`Applying fixes for ${scanResults.issues.length} issues`});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: repoId,
+        username: username,
+        status: 'fixing',
+        message: `Applying fixes for ${scanResults.issues.length} issues`,
+      });
       const fixResults = await this.securityService.fixRepository(
         cloneResult.localPath,
         scanResults.issues
       );
 
       if (fixResults.appliedFixes.length === 0) {
-        this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"completed",message:"No fixes could be applied automatically"});
+        this.scanLogs.push({
+          timestamp: new Date(),
+          repoId: repoId,
+          username: username,
+          status: 'completed',
+          message: 'No fixes could be applied automatically',
+        });
         return res.json({
           success: true,
           message: 'No fixes could be applied automatically',
@@ -299,7 +364,13 @@ class SecureBotController {
       // Create branch and commit changes
       const branchName = `securebot-fixes-${Date.now()}`;
       console.log(`🌿 Creating branch: ${branchName}`);
-      this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"fixing",message:`Creating branch ${branchName} for fixes`});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: repoId,
+        username: username,
+        status: 'fixing',
+        message: `Creating branch ${branchName} for fixes`,
+      });
 
       await this.repositoryService.createFixBranch(cloneResult.localPath, branchName);
 
@@ -316,10 +387,22 @@ class SecureBotController {
 
 Automated security fixes by SecureBot`
       );
-      this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"pushing",message:`Pushing committed changes to branch ${branchName}`});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: repoId,
+        username: username,
+        status: 'pushing',
+        message: `Pushing committed changes to branch ${branchName}`,
+      });
 
       if (!commitResult.hasChanges) {
-        this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"completed",message:"No changes to commit after applying fixes"});
+        this.scanLogs.push({
+          timestamp: new Date(),
+          repoId: repoId,
+          username: username,
+          status: 'completed',
+          message: 'No changes to commit after applying fixes',
+        });
         return res.json({
           success: true,
           message: 'No changes to commit',
@@ -336,7 +419,13 @@ Automated security fixes by SecureBot`
 
       // Create pull request
       console.log(`📤 Creating pull request for fixes`);
-      this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"creating_pr",message:`Creating pull request for branch ${branchName}`});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: repoId,
+        username: username,
+        status: 'creating_pr',
+        message: `Creating pull request for branch ${branchName}`,
+      });
       const pullRequest = await this.repositoryService.createPullRequest(
         cloneResult.repository,
         cloneResult.installation,
@@ -344,7 +433,13 @@ Automated security fixes by SecureBot`
         fixResults
       );
 
-      this.scanLogs.push({timestamp:new Date(),repoId:repoId,username:username,status:"completed",message:`Pull request created successfully: ${pullRequest.html_url}`});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: repoId,
+        username: username,
+        status: 'completed',
+        message: `Pull request created successfully: ${pullRequest.html_url}`,
+      });
       return res.json({
         success: true,
         message: 'Security fixes applied and pull request created successfully',
@@ -373,11 +468,23 @@ Automated security fixes by SecureBot`
       });
     } catch (error) {
       console.error('Error fixing repository and creating PR:', error);
-      this.scanLogs.push({timestamp:new Date(),repoId:req.body.repoId,username:req.body.username,status:"failed",message:error.message});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: req.body.repoId,
+        username: req.body.username,
+        status: 'failed',
+        message: error.message,
+      });
 
       // Handle specific error types
       if (error.message.includes('GOOGLE_AI_API_KEY')) {
-        this.scanLogs.push({timestamp:new Date(),repoId:req.body.repoId,username:req.body.username,status:"failed",message:"AI service configuration error"});
+        this.scanLogs.push({
+          timestamp: new Date(),
+          repoId: req.body.repoId,
+          username: req.body.username,
+          status: 'failed',
+          message: 'AI service configuration error',
+        });
         return res.status(500).json({
           success: false,
           error: 'AI service configuration error',
@@ -387,7 +494,13 @@ Automated security fixes by SecureBot`
       }
 
       if (error.message.includes('quota') || error.message.includes('rate limit')) {
-        this.scanLogs.push({timestamp:new Date(),repoId:req.body.repoId,username:req.body.username,status:"failed",message:"AI service rate limit exceeded"});
+        this.scanLogs.push({
+          timestamp: new Date(),
+          repoId: req.body.repoId,
+          username: req.body.username,
+          status: 'failed',
+          message: 'AI service rate limit exceeded',
+        });
         return res.status(429).json({
           success: false,
           error: 'AI service rate limit exceeded',
@@ -396,7 +509,13 @@ Automated security fixes by SecureBot`
         });
       }
 
-      this.scanLogs.push({timestamp:new Date(),repoId:req.body.repoId,username:req.body.username,status:"failed",message:"Failed to fix repository and create PR"});
+      this.scanLogs.push({
+        timestamp: new Date(),
+        repoId: req.body.repoId,
+        username: req.body.username,
+        status: 'failed',
+        message: 'Failed to fix repository and create PR',
+      });
 
       return res.status(500).json({
         success: false,
@@ -431,14 +550,14 @@ Automated security fixes by SecureBot`
   /**
    * Get logs of the authorized repo
    */
-  async getScanLogs(req,res){
-    try{
-    return res.json({
-      success: true,
-      scan_logs: this.scanLogs,
-      count: this.scanLogs.length,
-    });
-    }catch(error){
+  async getScanLogs(req, res) {
+    try {
+      return res.json({
+        success: true,
+        scan_logs: this.scanLogs,
+        count: this.scanLogs.length,
+      });
+    } catch (error) {
       console.error('Error getting scan logs:', error);
       return res.status(500).json({
         success: false,

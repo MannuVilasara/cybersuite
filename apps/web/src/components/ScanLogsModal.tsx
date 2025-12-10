@@ -94,10 +94,7 @@ const ScanLogsModal: React.FC<ScanLogsModalProps> = ({ isOpen, onClose, logs, lo
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-        onClick={onClose}
-      ></div>
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
 
       {/* Modal */}
       <div className="relative bg-black/95 border border-gray-800/50 rounded-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden shadow-2xl shadow-black/50 animate-in zoom-in-95 duration-200">
@@ -200,7 +197,7 @@ const ScanLogsModal: React.FC<ScanLogsModalProps> = ({ isOpen, onClose, logs, lo
                     second: '2-digit',
                     fractionalSecondDigits: 3,
                   });
-                  
+
                   const getLogColor = (status: string) => {
                     switch (status) {
                       case 'failed':
@@ -232,10 +229,7 @@ const ScanLogsModal: React.FC<ScanLogsModalProps> = ({ isOpen, onClose, logs, lo
                   };
 
                   return (
-                    <div
-                      key={index}
-                      className="group hover:bg-gray-900/50 transition-colors"
-                    >
+                    <div key={index} className="group hover:bg-gray-900/50 transition-colors">
                       <div className="flex items-start gap-3 px-4 py-2 font-mono text-xs">
                         {/* Line Number */}
                         <span className="text-gray-600 select-none w-8 text-right flex-shrink-0">
@@ -243,30 +237,24 @@ const ScanLogsModal: React.FC<ScanLogsModalProps> = ({ isOpen, onClose, logs, lo
                         </span>
 
                         {/* Timestamp */}
-                        <span className="text-gray-500 flex-shrink-0 w-24">
-                          {timestamp}
-                        </span>
+                        <span className="text-gray-500 flex-shrink-0 w-24">{timestamp}</span>
 
                         {/* Status */}
-                        <span className={`${getLogColor(log.status)} flex-shrink-0 w-20 flex items-center gap-1`}>
+                        <span
+                          className={`${getLogColor(log.status)} flex-shrink-0 w-20 flex items-center gap-1`}
+                        >
                           <span>{getLogPrefix(log.status)}</span>
                           <span className="uppercase font-semibold">{log.status}</span>
                         </span>
 
                         {/* Message */}
-                        <span className="text-gray-300 flex-1">
-                          {log.message}
-                        </span>
+                        <span className="text-gray-300 flex-1">{log.message}</span>
 
                         {/* Metadata */}
                         <div className="flex items-center gap-2 text-gray-600 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <span className="text-[10px]">
-                            repo:{log.repoId || 'N/A'}
-                          </span>
+                          <span className="text-[10px]">repo:{log.repoId || 'N/A'}</span>
                           <span>|</span>
-                          <span className="text-[10px]">
-                            user:{log.username || 'N/A'}
-                          </span>
+                          <span className="text-[10px]">user:{log.username || 'N/A'}</span>
                         </div>
                       </div>
                     </div>
@@ -307,7 +295,8 @@ const ScanLogsModal: React.FC<ScanLogsModalProps> = ({ isOpen, onClose, logs, lo
           background: rgba(255, 255, 255, 0.3);
         }
         .bg-grid-white {
-          background-image: linear-gradient(white 1px, transparent 1px),
+          background-image:
+            linear-gradient(white 1px, transparent 1px),
             linear-gradient(90deg, white 1px, transparent 1px);
           background-size: 20px 20px;
         }

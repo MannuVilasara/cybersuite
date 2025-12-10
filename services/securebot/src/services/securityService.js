@@ -65,7 +65,7 @@ class SecurityService {
           repoId: this.controller.currentRepoId || 'unknown',
           username: this.controller.currentUsername || 'unknown',
           status: 'scanning',
-          message: `Found ${files.length} files to scan`
+          message: `Found ${files.length} files to scan`,
         });
       }
 
@@ -208,13 +208,13 @@ class SecurityService {
         const criticalCount = summary.critical;
         const highCount = summary.high;
         const mediumCount = summary.medium;
-        
+
         this.controller.scanLogs.push({
           timestamp: new Date(),
           repoId: this.controller.currentRepoId || 'unknown',
           username: this.controller.currentUsername || 'unknown',
           status: 'scanned',
-          message: `Scan complete: ${issues.length} issues found (Critical: ${criticalCount}, High: ${highCount}, Medium: ${mediumCount})`
+          message: `Scan complete: ${issues.length} issues found (Critical: ${criticalCount}, High: ${highCount}, Medium: ${mediumCount})`,
         });
       }
 
@@ -245,7 +245,6 @@ class SecurityService {
   async fixRepository(repoPath, issues, maxFileSize = 1024 * 200) {
     try {
       console.log(`🔧 AI Fix request for: ${repoPath}`);
-      
 
       if (!issues || issues.length === 0) {
         return {
@@ -270,7 +269,7 @@ class SecurityService {
           repoId: this.controller.currentRepoId || 'unknown',
           username: this.controller.currentUsername || 'unknown',
           status: 'fixing',
-          message: `Starting to fix ${issues.length} security issues`
+          message: `Starting to fix ${issues.length} security issues`,
         });
       }
 
@@ -292,7 +291,7 @@ class SecurityService {
             repoId: this.controller.currentRepoId || 'unknown',
             username: this.controller.currentUsername || 'unknown',
             status: 'fixing',
-            message: `Processing ${fileName} (${i + 1}/${issues.length}) - ${issue.issue}`
+            message: `Processing ${fileName} (${i + 1}/${issues.length}) - ${issue.issue}`,
           });
         }
 
@@ -415,14 +414,14 @@ class SecurityService {
 
           console.log(`✅ Successfully fixed ${fileName}`);
           console.log(`📊 Size change: ${originalContent.length} → ${fixedContent.length} chars`);
-          
+
           if (this.controller) {
             this.controller.scanLogs.push({
               timestamp: new Date(),
               repoId: this.controller.currentRepoId || 'unknown',
               username: this.controller.currentUsername || 'unknown',
               status: 'fixing',
-              message: `✓ Fixed ${fileName} - ${issue.issue}`
+              message: `✓ Fixed ${fileName} - ${issue.issue}`,
             });
           }
         } catch (error) {
@@ -457,7 +456,7 @@ class SecurityService {
           repoId: this.controller.currentRepoId || 'unknown',
           username: this.controller.currentUsername || 'unknown',
           status: 'fixing',
-          message: `Fix complete: ${summary.successful} fixed, ${summary.failed} failed, ${summary.skipped} skipped (${summary.successRate} success rate)`
+          message: `Fix complete: ${summary.successful} fixed, ${summary.failed} failed, ${summary.skipped} skipped (${summary.successRate} success rate)`,
         });
       }
 
